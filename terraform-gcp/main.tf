@@ -56,15 +56,6 @@ resource "google_storage_bucket" "data_lake" {
   location = var.location
 }
 
-
-# create google bucket
-resource "google_storage_bucket" "function_bucket" {
-  name     = var.func_bucket
-  project  = var.project
-  location = var.location
-}
-
-
 # create bigquery datasets
 resource "google_bigquery_dataset" "dataset" {
   dataset_id = var.dataset
@@ -72,13 +63,57 @@ resource "google_bigquery_dataset" "dataset" {
   location   = var.location
 }
 
-resource "google_cloudfunctions_function" "gee_functions" {
-  name                   = "gee_functions"
-  description            = "My function"
-  project                = "data-enginerring-zoomcamp"
-  runtime                 = "python39"
-  available_memory_mb     = 128
-  source_archive_bucket = google_storage_bucket.data_lake.name  # Reference the bucket resource
-  trigger_http           = true
-  entry_point            = "helloGET"
+
+# create google bucket to store the function
+resource "google_storage_bucket" "function_bucket" {
+  name     = var.func_bucket
+  project  = var.project
+  location = var.location
+}
+
+
+
+# Generates an archive of the source code compressed as a .zip file.
+data "archive_file" "ndvi_source" {
+    type        = "zip"
+    source_dir  = "../src"
+    output_path = "./tmp/ndvi_function.zip"
+}
+
+
+# Add source code zip to the Cloud Function's bucket
+resource "google_storage_bucket_object" "zipped_data" {
+    source = data.archive_file.ndvi_source.output_path
+    content_type = "application/zip"
+
+    # Append to the MD5 checksum of the files's content
+    # to force the zip to be updated as soon as a change occurs
+    name  = "src-${data.archive_file.ndvi_source.output_md5}.zip"
+    bucket = google_storage_bucket.function_bucket.name
+
+    # Dependencies are automatically inferred so these lines can be deleted
+    depends_on   = [
+        google_storage_bucket.function_bucket,  # declared in `storage.tf`
+        data.archive_file.ndvi_source
+    ]
+}
+
+# Create the Cloud function 
+resource "google_cloudfunctions_function" "function" {
+    name                  = "gee_ndvi_function"
+    runtime               = "python37"  # of course changeable
+
+    # Get the source code of the cloud function as a Zip compression
+    source_archive_bucket = google_storage_bucket.function_bucket.name
+    source_archive_object = google_storage_bucket_object.zipped_data.name
+
+    # Must match the function name in the cloud function `main.py` source code
+    entry_point           = "hello_gcs"
+    
+
+    # Dependencies are automatically inferred so these lines can be deleted
+    depends_on            = [
+        google_storage_bucket.function_bucket,  # declared in `storage.tf`
+        google_storage_bucket_object.zip
+    ]
 }
