@@ -1,0 +1,14 @@
+[2024-04-01T16:01:46.579+0000] {taskinstance.py:1979} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: extract_osm_farmland.transform_farmland manual__2024-04-01T16:01:12.229537+00:00 [queued]>
+[2024-04-01T16:01:46.590+0000] {taskinstance.py:1979} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: extract_osm_farmland.transform_farmland manual__2024-04-01T16:01:12.229537+00:00 [queued]>
+[2024-04-01T16:01:46.591+0000] {taskinstance.py:2193} INFO - Starting attempt 1 of 2
+[2024-04-01T16:01:46.612+0000] {taskinstance.py:2217} INFO - Executing <Task(_PythonDecoratedOperator): transform_farmland> on 2024-04-01 16:01:12.229537+00:00
+[2024-04-01T16:01:46.619+0000] {standard_task_runner.py:60} INFO - Started process 3690 to run task
+[2024-04-01T16:01:46.623+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'extract_osm_farmland', 'transform_farmland', 'manual__2024-04-01T16:01:12.229537+00:00', '--job-id', '98', '--raw', '--subdir', 'DAGS_FOLDER/extract_file_data_from_osm.py', '--cfg-path', '/tmp/tmpi1i0z_zh']
+[2024-04-01T16:01:46.625+0000] {standard_task_runner.py:88} INFO - Job 98: Subtask transform_farmland
+[2024-04-01T16:01:46.692+0000] {task_command.py:423} INFO - Running <TaskInstance: extract_osm_farmland.transform_farmland manual__2024-04-01T16:01:12.229537+00:00 [running]> on host 84497f327267
+[2024-04-01T16:01:46.814+0000] {taskinstance.py:2513} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='extract_osm_farmland' AIRFLOW_CTX_TASK_ID='transform_farmland' AIRFLOW_CTX_EXECUTION_DATE='2024-04-01T16:01:12.229537+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2024-04-01T16:01:12.229537+00:00'
+[2024-04-01T16:03:40.823+0000] {logging_mixin.py:188} INFO - DataFrame uploaded to GCS: gs://mage-zoomcamp-bucket-sammy/Nigeria_farmland.geojson
+[2024-04-01T16:03:40.876+0000] {python.py:202} INFO - Done. Returned value was: gs://mage-zoomcamp-bucket-sammy/Nigeria_farmland.geojson
+[2024-04-01T16:03:40.955+0000] {taskinstance.py:1149} INFO - Marking task as SUCCESS. dag_id=extract_osm_farmland, task_id=transform_farmland, execution_date=20240401T160112, start_date=20240401T160146, end_date=20240401T160340
+[2024-04-01T16:03:41.035+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 0
+[2024-04-01T16:03:41.082+0000] {taskinstance.py:3312} INFO - 0 downstream tasks scheduled from follow-on schedule check

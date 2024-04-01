@@ -1,0 +1,8 @@
+export GOOGLE_CREDENTIAL='./keys/data-enginerring-zoomcamp-b8719aa4a43e.json'
+echo $GOOGLE_CREDENTIAL
+terraform fmt for formating
+terraform plan allows you to go through the plan before deploy it
+terraform apply to create the infrastructure
+terraform init
+terraform destroy to delete the infrastucture created
+

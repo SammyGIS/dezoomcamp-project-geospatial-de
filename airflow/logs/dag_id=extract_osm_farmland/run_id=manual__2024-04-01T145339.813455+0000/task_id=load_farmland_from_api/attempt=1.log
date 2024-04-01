@@ -1,0 +1,33 @@
+[2024-04-01T14:53:42.226+0000] {taskinstance.py:1979} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: extract_osm_farmland.load_farmland_from_api manual__2024-04-01T14:53:39.813455+00:00 [queued]>
+[2024-04-01T14:53:42.236+0000] {taskinstance.py:1979} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: extract_osm_farmland.load_farmland_from_api manual__2024-04-01T14:53:39.813455+00:00 [queued]>
+[2024-04-01T14:53:42.237+0000] {taskinstance.py:2193} INFO - Starting attempt 1 of 2
+[2024-04-01T14:53:42.254+0000] {taskinstance.py:2217} INFO - Executing <Task(_PythonDecoratedOperator): load_farmland_from_api> on 2024-04-01 14:53:39.813455+00:00
+[2024-04-01T14:53:42.262+0000] {standard_task_runner.py:60} INFO - Started process 2667 to run task
+[2024-04-01T14:53:42.266+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'extract_osm_farmland', 'load_farmland_from_api', 'manual__2024-04-01T14:53:39.813455+00:00', '--job-id', '85', '--raw', '--subdir', 'DAGS_FOLDER/extract_file_data_from_osm.py', '--cfg-path', '/tmp/tmpn29aw18q']
+[2024-04-01T14:53:42.267+0000] {standard_task_runner.py:88} INFO - Job 85: Subtask load_farmland_from_api
+[2024-04-01T14:53:42.325+0000] {task_command.py:423} INFO - Running <TaskInstance: extract_osm_farmland.load_farmland_from_api manual__2024-04-01T14:53:39.813455+00:00 [running]> on host 84497f327267
+[2024-04-01T14:53:42.422+0000] {taskinstance.py:2513} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='extract_osm_farmland' AIRFLOW_CTX_TASK_ID='load_farmland_from_api' AIRFLOW_CTX_EXECUTION_DATE='2024-04-01T14:53:39.813455+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2024-04-01T14:53:39.813455+00:00'
+[2024-04-01T14:54:04.125+0000] {collection.py:293} WARNING - Skipping field nodes: invalid type 13
+[2024-04-01T14:54:07.604+0000] {taskinstance.py:2731} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/models/taskinstance.py", line 444, in _execute_task
+    result = _execute_callable(context=context, **execute_callable_kwargs)
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/models/taskinstance.py", line 414, in _execute_callable
+    return execute_callable(context=context, **execute_callable_kwargs)
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/decorators/base.py", line 241, in execute
+    return_value = super().execute(context)
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/operators/python.py", line 200, in execute
+    return_value = self.execute_callable()
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/operators/python.py", line 217, in execute_callable
+    return self.python_callable(*self.op_args, **self.op_kwargs)
+  File "/opt/airflow/dags/extract_file_data_from_osm.py", line 69, in load_farmland_from_api
+    upload_geodataframe_to_gcs(farm_gdf, GCS_BUCKET, GCS_INTERMEDIATE_PATH)
+  File "/opt/airflow/dags/utils.py", line 10, in upload_geodataframe_to_gcs
+    storage_client = storage.Client.from_service_account_json(json_credentials_path)
+  File "/home/airflow/.local/lib/python3.8/site-packages/google/cloud/client/__init__.py", line 106, in from_service_account_json
+    with io.open(json_credentials_path, "r", encoding="utf-8") as json_fi:
+FileNotFoundError: [Errno 2] No such file or directory: '\\key\\data-enginerring-zoomcamp-b8719aa4a43e.json'
+[2024-04-01T14:54:07.623+0000] {taskinstance.py:1149} INFO - Marking task as UP_FOR_RETRY. dag_id=extract_osm_farmland, task_id=load_farmland_from_api, execution_date=20240401T145339, start_date=20240401T145342, end_date=20240401T145407
+[2024-04-01T14:54:07.639+0000] {standard_task_runner.py:107} ERROR - Failed to execute job 85 for task load_farmland_from_api ([Errno 2] No such file or directory: '\\key\\data-enginerring-zoomcamp-b8719aa4a43e.json'; 2667)
+[2024-04-01T14:54:07.689+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 1
+[2024-04-01T14:54:07.715+0000] {taskinstance.py:3312} INFO - 0 downstream tasks scheduled from follow-on schedule check
