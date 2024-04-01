@@ -48,15 +48,26 @@ resource "google_compute_instance" "default" {
   }
 }
 
+
+# create google bucket
 resource "google_storage_bucket" "data_lake" {
-  name     = "sammy_project_bucket2024"
+  name     = var.bucket
   project  = var.project
   location = var.location
 }
 
 
+# create google bucket
+resource "google_storage_bucket" "function_bucket" {
+  name     = var.func_bucket
+  project  = var.project
+  location = var.location
+}
+
+
+# create bigquery datasets
 resource "google_bigquery_dataset" "dataset" {
-  dataset_id = "my_first_dataset"
+  dataset_id = var.dataset
   project    = var.project
   location   = var.location
 }
