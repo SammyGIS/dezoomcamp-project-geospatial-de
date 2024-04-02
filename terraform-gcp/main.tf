@@ -24,7 +24,7 @@ resource "google_compute_instance" "default" {
   boot_disk {
     initialize_params {
       image = "ubuntu-2004-lts"
-      size   = 100
+      size  = 100
       labels = {
         my_label = "project"
       }
@@ -39,11 +39,11 @@ resource "google_compute_instance" "default" {
     }
   }
 
-  metadata_startup_script = "${file("./install_docker.sh")}"
-  
+  metadata_startup_script = file("./install_docker.sh")
+
   service_account {
     # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
-    email  = "farm-watch-project@data-enginerring-zoomcamp.iam.gserviceaccount.com"
+    email  = var.email
     scopes = ["cloud-platform"]
   }
 }
@@ -75,45 +75,64 @@ resource "google_storage_bucket" "function_bucket" {
 
 # Generates an archive of the source code compressed as a .zip file.
 data "archive_file" "ndvi_source" {
-    type        = "zip"
-    source_dir  = "../src"
-    output_path = "./tmp/ndvi_function.zip"
+  type        = "zip"
+  source_dir  = "../src"
+  output_path = "./tmp/ndvi_function.zip"
 }
 
 
 # Add source code zip to the Cloud Function's bucket
 resource "google_storage_bucket_object" "zipped_data" {
-    source = data.archive_file.ndvi_source.output_path
-    content_type = "application/zip"
+  source       = data.archive_file.ndvi_source.output_path
+  content_type = "application/zip"
 
-    # Append to the MD5 checksum of the files's content
-    # to force the zip to be updated as soon as a change occurs
-    name  = "src-${data.archive_file.ndvi_source.output_md5}.zip"
-    bucket = google_storage_bucket.function_bucket.name
+  # Append to the MD5 checksum of the files's content
+  # to force the zip to be updated as soon as a change occurs
+  name   = "src-${data.archive_file.ndvi_source.output_md5}.zip"
+  bucket = google_storage_bucket.function_bucket.name
 
-    # Dependencies are automatically inferred so these lines can be deleted
-    depends_on   = [
-        google_storage_bucket.function_bucket,  # declared in `storage.tf`
-        data.archive_file.ndvi_source
-    ]
+  # Dependencies are automatically inferred so these lines can be deleted
+  depends_on = [
+    google_storage_bucket.function_bucket, # declared in `storage.tf`
+    data.archive_file.ndvi_source
+  ]
 }
 
 # Create the Cloud function 
 resource "google_cloudfunctions_function" "function" {
-    name                  = "gee_ndvi_function"
-    runtime               = "python37"  # of course changeable
+  name    = "gee_ndvi_function"
+  runtime = "python37" # of course changeable
 
-    # Get the source code of the cloud function as a Zip compression
-    source_archive_bucket = google_storage_bucket.function_bucket.name
-    source_archive_object = google_storage_bucket_object.zipped_data.name
+  # Get the source code of the cloud function as a Zip compression
+  source_archive_bucket = google_storage_bucket.function_bucket.name
+  source_archive_object = google_storage_bucket_object.zipped_data.name
 
-    # Must match the function name in the cloud function `main.py` source code
-    entry_point           = "hello_gcs"
-    
+  available_memory_mb   = 528
 
-    # Dependencies are automatically inferred so these lines can be deleted
-    depends_on            = [
-        google_storage_bucket.function_bucket,  # declared in `storage.tf`
-        google_storage_bucket_object.zip
-    ]
+  # Must match the function name in the cloud function `main.py` source code
+  trigger_http = true
+  entry_point  = "main"
+  environment_variables = {
+    name= "terraform"
+  }
+
+
+
+  # Dependencies are automatically inferred so these lines can be deleted
+  depends_on = [
+    google_storage_bucket.function_bucket, # declared in `storage.tf`
+    google_storage_bucket_object.zipped_data
+  ]
+}
+
+resource "google_cloud_scheduler_job" "hellow-world-job" {
+  name         = "gee_ndvi_function"
+  description  = "get ndvi data every 7 days"
+  schedule     = "0/2 * * * *"
+  http_target {
+    http_method = "GET"
+    uri = google_cloudfunctions_function.function.https_trigger_url
+    oidc_token {
+      service_account_email = "<terraform-sa-email>"
+    }
 }
