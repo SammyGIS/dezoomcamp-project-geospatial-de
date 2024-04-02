@@ -13,13 +13,11 @@ provider "google" {
   region      = var.region
 }
 
-
-## create google cloud compute
 resource "google_compute_instance" "compute-instance" {
-  name         = "my-instance"
-  machine_type = var.machine_type
-  zone         = var.region
-  project      = var.project
+  name               = "my-instance"
+  machine_type       = var.machine_type
+  zone               = var.region
+  project             = var.project
 
   boot_disk {
     initialize_params {
@@ -42,98 +40,70 @@ resource "google_compute_instance" "compute-instance" {
   metadata_startup_script = file("./install_docker.sh")
 
   service_account {
-    # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
-    email  = var.email
-    scopes = ["cloud-platform"]
+    email  = var.service_account_email  # Assuming this variable holds the service account email
+    scopes = ["https://www.googleapis.com/auth/cloud-platform"]
   }
 }
 
-
-# create google bucket
 resource "google_storage_bucket" "data_lake" {
   name     = var.bucket
   project  = var.project
   location = var.location
 }
 
-# create bigquery datasets
 resource "google_bigquery_dataset" "dataset" {
   dataset_id = var.dataset
   project    = var.project
   location   = var.location
 }
 
-
-# create google bucket to store the function
 resource "google_storage_bucket" "function_bucket" {
   name     = var.func_bucket
   project  = var.project
   location = var.location
 }
 
-
-
-# Generates an archive of the source code compressed as a .zip file.
 data "archive_file" "ndvi_source" {
   type        = "zip"
   source_dir  = "${path.module}/ndvi_function"
   output_path = "${path.module}/ndvi_function.zip"
 }
 
-
-# Add source code zip to the Cloud Function's bucket
 resource "google_storage_bucket_object" "zipped_code" {
   source       = data.archive_file.ndvi_source.output_path
   content_type = "application/zip"
 
-  # Append to the MD5 checksum of the files's content
-  # to force the zip to be updated as soon as a change occurs
   name   = "src-${data.archive_file.ndvi_source.output_md5}.zip"
   bucket = google_storage_bucket.function_bucket.name
-
-  # Dependencies are automatically inferred so these lines can be deleted
-  depends_on = [
-    google_storage_bucket.function_bucket, # declared in `storage.tf`
-    data.archive_file.ndvi_source
-  ]
 }
 
-# Create the Cloud function 
 resource "google_cloudfunctions_function" "gee_ndvi_function" {
-  name    = "gee_ndvi_function"
-  runtime = "python37" # of course changeable
+  name        = "gee_ndvi_function"
+  runtime     = "python37"
+  region      = var.region
 
-  # Get the source code of the cloud function as a Zip compression
   source_archive_bucket = google_storage_bucket.function_bucket.name
   source_archive_object = google_storage_bucket_object.zipped_code.name
 
-  available_memory_mb   = 528
+  available_memory_mb = 528
 
-  # Must match the function name in the cloud function `main.py` source code
   trigger_http = true
   entry_point  = "main"
   environment_variables = {
-    name= "terraform"
+    # Use a more descriptive variable name here
+    deployment_name = "terraform"
   }
-
-
-
-  # Dependencies are automatically inferred so these lines can be deleted
-  depends_on = [
-    google_storage_bucket.function_bucket, # declared in `storage.tf`
-    google_storage_bucket_object.zipped_code
-  ]
 }
 
 resource "google_cloud_scheduler_job" "automate_ndvi" {
-  name         = "gee_ndvi_function"
-  description  = "get ndvi data every 7 days"
-  schedule     = "0/2 * * * *"
+  name               = "gee_ndvi_function"
+  description        = "get ndvi data every 7 days"
+  schedule           = "0/2 * * * *"
   http_target {
     http_method = "GET"
-    uri = google_cloudfunctions_function.gee_ndvi_function.https_trigger_url
+    uri         = google_cloudfunctions_function.gee_ndvi_function.https_trigger_url
     oidc_token {
-      service_account_email = var.email
+      service_account_email = var.service_account_email
     }
-}
+  }
 }

@@ -36,7 +36,12 @@ variable "dataset" {
   default     = "farm_dataset"
 }
 
-variable "email" {
+variable "service_account_email" {
   description = "value"
   default = "farm-watch-project@data-enginerring-zoomcamp.iam.gserviceaccount.com"  
+}
+
+variable "region_function" {
+  type = string
+  default = "us-east4"
 }
