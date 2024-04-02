@@ -82,7 +82,7 @@ data "archive_file" "ndvi_source" {
 
 
 # Add source code zip to the Cloud Function's bucket
-resource "google_storage_bucket_object" "zipped_data" {
+resource "google_storage_bucket_object" "zipped_code" {
   source       = data.archive_file.ndvi_source.output_path
   content_type = "application/zip"
 
@@ -99,13 +99,13 @@ resource "google_storage_bucket_object" "zipped_data" {
 }
 
 # Create the Cloud function 
-resource "google_cloudfunctions_function" "function" {
+resource "google_cloudfunctions_function" "gee_ndvi_function" {
   name    = "gee_ndvi_function"
   runtime = "python37" # of course changeable
 
   # Get the source code of the cloud function as a Zip compression
   source_archive_bucket = google_storage_bucket.function_bucket.name
-  source_archive_object = google_storage_bucket_object.zipped_data.name
+  source_archive_object = google_storage_bucket_object.zipped_code.name
 
   available_memory_mb   = 528
 
@@ -121,17 +121,17 @@ resource "google_cloudfunctions_function" "function" {
   # Dependencies are automatically inferred so these lines can be deleted
   depends_on = [
     google_storage_bucket.function_bucket, # declared in `storage.tf`
-    google_storage_bucket_object.zipped_data
+    google_storage_bucket_object.zipped_code
   ]
 }
 
-resource "google_cloud_scheduler_job" "hellow-world-job" {
+resource "google_cloud_scheduler_job" "automate_ndvi" {
   name         = "gee_ndvi_function"
   description  = "get ndvi data every 7 days"
   schedule     = "0/2 * * * *"
   http_target {
     http_method = "GET"
-    uri = google_cloudfunctions_function.function.https_trigger_url
+    uri = google_cloudfunctions_function.gee_ndvi_function.https_trigger_url
     oidc_token {
       service_account_email = var.email
     }

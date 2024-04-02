@@ -6,7 +6,7 @@ import osm2geojson
 import geopandas as gpd
 from airflow.decorators import dag, task
 from airflow.models import Variable
-from utils import download_geodataframe_from_gcs,upload_geodataframe_to_gcs
+from utils import download_geodataframe_from_gcs,upload_geodataframe_to_gcs,upload_geojson_to_bigquery
 import io
 
 # Define the Overpass URL
@@ -38,6 +38,7 @@ default_args = {
 GCS_BUCKET = Variable.get("gcs_bucket")  # Get GCS bucket name from Airflow Variables
 GCS_INTERMEDIATE_PATH = "osm_farmland.geojson"
 GCS_RESULT_PATH = "Nigeria_farmland.geojson"
+TABLE_ID = "farm_dataset"
 
 
 # Define the DAG
@@ -75,7 +76,7 @@ def extract_osm_farmland():
             return None
 
     @task
-    def transform_farmland(farm_gdf_path):
+    def transform_load_togcs(farm_gdf_path):
         # Download GeoDataFrame from GCS
         farm_gdf = download_geodataframe_from_gcs(GCS_BUCKET, GCS_INTERMEDIATE_PATH)
         
@@ -89,13 +90,23 @@ def extract_osm_farmland():
         upload_geodataframe_to_gcs(gdf_joined, GCS_BUCKET, GCS_RESULT_PATH)
 
         return f"gs://{GCS_BUCKET}/{GCS_RESULT_PATH}"
-
+    
+    @task
+    def load_data_bigquery():
+        try:
+            upload_geojson_to_bigquery(TABLE_ID, GCS_BUCKET,GCS_RESULT_PATH)
+            print(f"dataset upload got bigquery {TABLE_ID} successfully ")
+        except Exception as e:
+            print(e)
+        
+        
     # Define the tasks
     get_farmland = load_farmland_from_api()
-    transform_data = transform_farmland(get_farmland)
+    transform_togcs = transform_load_togcs(get_farmland)
+    load_geojson_tobq = load_data_bigquery()
 
     # Set task dependencies
-    get_farmland >> transform_data
+    get_farmland >> transform_togcs >> load_geojson_tobq
 
 # Instantiate the DAG
 extract_osm_farmland()

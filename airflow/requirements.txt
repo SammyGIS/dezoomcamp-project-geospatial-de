@@ -1,3 +1,5 @@
 geopandas
 osm2geojson
 google.cloud
+google-cloud-bigquery
+geojson
