@@ -29,3 +29,8 @@ variable "dataset" {
   description = "value"
   default     = "farm_dataset"
 }
+
+variable "email" {
+  description = "value"
+  default = "farm-watch-project@data-enginerring-zoomcamp.iam.gserviceaccount.com"  
+}
