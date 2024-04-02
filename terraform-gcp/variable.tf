@@ -5,7 +5,7 @@ variable "project" {
 
 variable "region" {
   description = "value"
-  default     = "us-east4-a"
+  default     = "us-east4-c"
 }
 
 variable "machine_type" {

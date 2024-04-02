@@ -76,8 +76,8 @@ resource "google_storage_bucket" "function_bucket" {
 # Generates an archive of the source code compressed as a .zip file.
 data "archive_file" "ndvi_source" {
   type        = "zip"
-  source_dir  = "../src"
-  output_path = "./tmp/ndvi_function.zip"
+  source_dir  = "${path.module}/ndvi_function"
+  output_path = "${path.module}/ndvi_function.zip"
 }
 
 
