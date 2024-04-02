@@ -15,9 +15,9 @@ provider "google" {
 
 
 ## create google cloud compute
-resource "google_compute_instance" "default" {
+resource "google_compute_instance" "compute-instance" {
   name         = "my-instance"
-  machine_type = "e2-standard-4"
+  machine_type = var.machine_type
   zone         = var.region
   project      = var.project
 
@@ -133,6 +133,7 @@ resource "google_cloud_scheduler_job" "hellow-world-job" {
     http_method = "GET"
     uri = google_cloudfunctions_function.function.https_trigger_url
     oidc_token {
-      service_account_email = "<terraform-sa-email>"
+      service_account_email = var.email
     }
+}
 }
