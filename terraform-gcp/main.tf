@@ -49,6 +49,7 @@ resource "google_storage_bucket" "data_lake" {
   name     = var.bucket
   project  = var.project
   location = var.location
+  force_destroy = true
 }
 
 resource "google_bigquery_dataset" "dataset" {
@@ -61,6 +62,7 @@ resource "google_storage_bucket" "function_bucket" {
   name     = var.func_bucket
   project  = var.project
   location = var.location
+  force_destroy = true
 }
 
 data "archive_file" "ndvi_source" {
@@ -78,14 +80,14 @@ resource "google_storage_bucket_object" "zipped_code" {
 }
 
 resource "google_cloudfunctions_function" "gee_ndvi_function" {
-  name        = "gee_ndvi_function"
-  runtime     = "python37"
-  region      = var.region
+  name     = "gee_ndvi_function"
+  runtime = "python39"
+  region   = var.region_function
 
   source_archive_bucket = google_storage_bucket.function_bucket.name
   source_archive_object = google_storage_bucket_object.zipped_code.name
 
-  available_memory_mb = 528
+  available_memory_mb = 2048
 
   trigger_http = true
   entry_point  = "main"

@@ -4,7 +4,10 @@ import pandas as pd
 import geopandas as gpd
 import json
 import ee
+import io
 from google.cloud import storage
+
+json_credentials_path = './data-enginerring-zoomcamp-b8719aa4a43e.json'
 
 # Define a helper function to put the GeoDataFrame in the right format for constructing an EE object
 def shp_to_ee_fmt(geodf):
@@ -63,8 +66,8 @@ def process_zonal_stats_chunks(image, scale, farmland_gdf, chunk_size):
     
     return final_zone_stats_gdf
 
-def upload_dataframe_to_gcs(dataframe: pd.DataFrame, bucket_name: str, destination_blob_path: str):
-    storage_client = storage.Client()
+def upload_dataframe_to_gcs(dataframe: pd.DataFrame, bucket_name: str, destination_blob_path: str,json_credentials_path):
+    storage_client = storage.Client.from_service_account_json(json_credentials_path)
     bucket = storage_client.get_bucket(bucket_name)
     blob = bucket.blob(destination_blob_path)
 
@@ -75,6 +78,15 @@ def upload_dataframe_to_gcs(dataframe: pd.DataFrame, bucket_name: str, destinati
     blob.upload_from_string(csv_bytes)
 
     print(f'DataFrame uploaded to GCS: gs://{bucket_name}/{destination_blob_path}')
+
+def download_geodataframe_from_gcs(bucket_name, file_path,json_credentials_path):
+    client = storage.Client.from_service_account_json(json_credentials_path)
+    bucket = client.bucket(bucket_name)
+    blob = bucket.blob(file_path)
+    data = blob.download_as_string()
+    gdf = gpd.read_file(io.BytesIO(data))
+    return gdf
+
 
 
 
