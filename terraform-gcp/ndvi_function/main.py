@@ -41,6 +41,7 @@ def getNDVI(image):
     image = image.addBands(ndvi)
     return image
 
+# if __name__ == "__main__":
 def main():
     # Set analysis parameters
     scale = 100
@@ -60,6 +61,4 @@ def main():
     bucket_name = 'sammy_project_bucket2024'
     destination_blob_path = f'ndvi/ndvi_{today.strftime("%Y-%m-%d")}.csv'
 
-    upload_dataframe_to_gcs(farmland_data,bucket_name, destination_blob_path)
-
-main()
+    upload_dataframe_to_gcs(farmland_data,bucket_name, destination_blob_path,key_file)

@@ -92,7 +92,7 @@ def extract_osm_farmland():
         return f"gs://{GCS_BUCKET}/{GCS_RESULT_PATH}"
     
     @task
-    def load_data_bigquery():
+    def load_data_tobigquery():
         try:
             upload_geojson_to_bigquery(TABLE_ID, GCS_BUCKET,GCS_RESULT_PATH)
             print(f"dataset upload got bigquery {TABLE_ID} successfully ")
@@ -103,7 +103,7 @@ def extract_osm_farmland():
     # Define the tasks
     get_farmland = load_farmland_from_api()
     transform_togcs = transform_load_togcs(get_farmland)
-    load_geojson_tobq = load_data_bigquery()
+    load_geojson_tobq = load_data_tobigquery()
 
     # Set task dependencies
     get_farmland >> transform_togcs >> load_geojson_tobq
