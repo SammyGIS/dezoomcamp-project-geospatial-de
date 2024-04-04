@@ -123,7 +123,7 @@ data "archive_file" "ndmi_source" {
   output_path = "${path.module}/ndmi_function.zip"
 }
 
-resource "google_storage_bucket_object" "zipped_code" {
+resource "google_storage_bucket_object" "ndmi_zipped_code" {
   source       = data.archive_file.ndmi_source.output_path
   content_type = "application/zip"
 
@@ -140,7 +140,7 @@ resource "google_cloudfunctions_function" "gee_ndmi_function" {
   timeout = 300  # 5 minutes
 
   source_archive_bucket = google_storage_bucket.function_bucket.name
-  source_archive_object = google_storage_bucket_object.zipped_code.name
+  source_archive_object = google_storage_bucket_object.ndmi_zipped_code.name
 
   available_memory_mb = 4098
 
