@@ -85,7 +85,7 @@ resource "google_cloudfunctions_function" "gee_ndvi_function" {
   region   = var.region_function
   
   # Set the timeout duration here
-  timeout = "600s"  # 10 minutes
+  timeout = "300s"  #  minutes
 
   source_archive_bucket = google_storage_bucket.function_bucket.name
   source_archive_object = google_storage_bucket_object.zipped_code.name
