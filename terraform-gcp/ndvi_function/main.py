@@ -42,9 +42,6 @@ def getNDVI(image):
     return image
 
 def main(request):
-
-    response = request.to_json()
-
     try:
         scale = 100
         chunk_size = 4000  
@@ -68,7 +65,7 @@ def main(request):
         response = {'statusCode': 200, 'body': "Successfully"}
     
     except Exception as e:
-        print(f"Error in Lambda function: {str(e)}")
+        print(f"Error in Cloud function: {str(e)}")
         response = {'statusCode': 500, 'body': "Error"}
 
     return response
