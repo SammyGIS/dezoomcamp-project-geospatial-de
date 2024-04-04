@@ -38,27 +38,16 @@ def download_geodataframe_from_gcs(bucket_name, file_path):
     return gdf
 
 
-
-def upload_geojson_to_bigquery(table_id, bucket_name, destination_blob_path):
-    # Initialize BigQuery client using service account credentials
+def upload_geojson_to_bigquery(table_id, bucket_name, blob_path, json_credentials_path):
+    # Initialize BigQuery and GCS clients using service account credentials
     bigquery_client = bigquery.Client.from_service_account_json(json_credentials_path)
+    storage_client = storage.Client.from_service_account_json(json_credentials_path)
     
     # Get the GeoJSON data from GCS
-    storage_client = storage.Client.from_service_account_json(json_credentials_path)
     bucket = storage_client.bucket(bucket_name)
-    blob = bucket.blob(destination_blob_path)
-    geojson_data = blob.download_as_string()
-
-    # Parse GeoJSON data
-    features = geojson.loads(geojson_data)["features"]
-
-    # Extract rows from features
-    rows = []
-    for feature in features:
-        properties = feature["properties"]
-        geometry = feature["geometry"]
-        row = (properties['id'], properties['statename'], properties['lganame'], properties['wardname'], properties['urban'], properties['landuse'], properties['NDMI'], geometry)
-        rows.append(row)
+    blob = bucket.blob(blob_path)
+    geojson_data = blob.download_as_string().decode('utf-8')
+    geojson_lines = geojson_data.splitlines()
 
     # Define schema for BigQuery table
     schema = [
@@ -68,17 +57,22 @@ def upload_geojson_to_bigquery(table_id, bucket_name, destination_blob_path):
         bigquery.SchemaField("wardname", "STRING"),
         bigquery.SchemaField("urban", "BOOLEAN"),
         bigquery.SchemaField("landuse", "STRING"),
+        bigquery.SchemaField("NDMI", "FLOAT"),  # Assuming NDMI is a float value
         bigquery.SchemaField("geometry", "GEOGRAPHY")
     ]
 
-    # Insert rows into BigQuery table
-    errors = bigquery_client.insert_rows(table_id, rows, selected_fields=schema)
+    # Load GeoJSON lines into BigQuery
+    job_config = bigquery.LoadJobConfig(
+        schema=schema,
+        source_format=bigquery.SourceFormat.NEWLINE_DELIMITED_JSON,
+    )
+    job = bigquery_client.load_table_from_json(
+        geojson_lines, table_id, job_config=job_config
+    )
 
-    # Check for errors during insertion
-    if errors:
-        raise RuntimeError(f"Row insert failed: {errors}")
-    else:
-        print(f"Data uploaded from GCS bucket '{bucket_name}' and file '{destination_blob_path}' to BigQuery table '{table_id}'.")
+    # Wait for the job to complete
+    job.result()
 
+    print(f"Data uploaded from GCS bucket '{bucket_name}' and file '{blob_path}' to BigQuery table '{table_id}'.")
 
 
