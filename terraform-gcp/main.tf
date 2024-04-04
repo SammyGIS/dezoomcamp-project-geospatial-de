@@ -97,34 +97,6 @@ resource "google_cloudfunctions_function" "gee_ndvi_function" {
   }
 }
 
-# resource "google_cloudfunctions2_function" "gee_ndvi_function" {
-#   name = "gee_ndvi_function"
-#   location =var.region_function
-#   description = "a new function"
-
-#   build_config {
-#     runtime = "python39"
-#     entry_point = "main"  # Set the entry point 
-#     source {
-#       storage_source {
-#         bucket = google_storage_bucket.function_bucket.name
-#         object = google_storage_bucket_object.zipped_code.name
-       
-#       }
-#     }
-#   }
-
-#   service_config {
-#     max_instance_count  = 1
-#     available_memory    = "256"
-#     timeout_seconds     = 600
-#   }
-# }
-
-# output "function_uri" { 
-#   value = google_cloudfunctions2_function.gee_ndvi_function.service_config[0].uri
-# }
-
 resource "google_cloud_scheduler_job" "automate_ndvi" {
   name               = "gee_ndvi_function"
   description        = "get ndvi data every 7 days"
