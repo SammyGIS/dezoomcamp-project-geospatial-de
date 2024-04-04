@@ -68,7 +68,6 @@ def upload_geojson_to_bigquery(table_id, bucket_name, destination_blob_path):
         bigquery.SchemaField("wardname", "STRING"),
         bigquery.SchemaField("urban", "BOOLEAN"),
         bigquery.SchemaField("landuse", "STRING"),
-        bigquery.SchemaField("NDMI", "FLOAT"),
         bigquery.SchemaField("geometry", "GEOGRAPHY")
     ]
 

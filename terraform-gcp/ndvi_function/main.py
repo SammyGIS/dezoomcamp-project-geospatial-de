@@ -41,24 +41,34 @@ def getNDVI(image):
     image = image.addBands(ndvi)
     return image
 
-# if __name__ == "__main__":
-def main():
-    # Set analysis parameters
-    scale = 100
-    chunk_size = 4000  # Step size for subset iteration
-    farm_gdf = download_geodataframe_from_gcs(GCS_BUCKET, GEOJSON_DATA,key_file)
-    imagery = "COPERNICUS/S2_SR_HARMONIZED"
-    farm_boundary = ee.Geometry.MultiPolygon(shp_to_ee_fmt(farm_gdf))
-    image = source_imagery(imagery, farm_boundary)
-    ndvi = getNDVI(image)
-    farmland_ndvi = process_zonal_stats_chunks(ndvi, scale,farm_gdf,chunk_size)
+def main(request):
 
-    farmland_ndvi['processed_date'] = today.strftime('%Y-%m-%d')
-    gdf_joined = farmland_ndvi.merge(farm_gdf, how='inner', left_index=True, right_index=True)
-    farmland_data = gdf_joined[['id', 'ndvi', 'processed_date']]
-    # farmland_data.to_csv(f'ndmi_{today.strftime('%Y-%m-%d')}.csv',index=False)
+    response = request.to_json()
 
-    bucket_name = 'sammy_project_bucket2024'
-    destination_blob_path = f'ndvi/ndvi_{today.strftime("%Y-%m-%d")}.csv'
+    try:
+        scale = 100
+        chunk_size = 4000  
+        farm_gdf = download_geodataframe_from_gcs(GCS_BUCKET, GEOJSON_DATA, key_file)
+        imagery = "COPERNICUS/S2_SR_HARMONIZED"
+        farm_boundary = ee.Geometry.MultiPolygon(shp_to_ee_fmt(farm_gdf))
+        image = source_imagery(imagery, farm_boundary)
+        ndvi = getNDVI(image)
+        farmland_ndvi = process_zonal_stats_chunks(ndvi, scale, farm_gdf, chunk_size)
 
-    upload_dataframe_to_gcs(farmland_data,bucket_name, destination_blob_path,key_file)
+        today = datetime.today() 
+        farmland_ndvi['processed_date'] = today.strftime('%Y-%m-%d')
+        gdf_joined = farmland_ndvi.merge(farm_gdf, how='inner', left_index=True, right_index=True)
+        farmland_data = gdf_joined[['id', 'ndvi', 'processed_date']]
+
+        bucket_name = 'sammy_project_bucket2024'
+        destination_blob_path = f'ndvi/ndvi_{today.strftime("%Y-%m-%d")}.csv'
+
+        upload_dataframe_to_gcs(farmland_data, bucket_name, destination_blob_path, key_file)
+        
+        response = {'statusCode': 200, 'body': "Successfully"}
+    
+    except Exception as e:
+        print(f"Error in Lambda function: {str(e)}")
+        response = {'statusCode': 500, 'body': "Error"}
+
+    return response
