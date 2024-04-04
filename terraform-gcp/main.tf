@@ -90,7 +90,7 @@ resource "google_cloudfunctions_function" "gee_ndvi_function" {
   source_archive_bucket = google_storage_bucket.function_bucket.name
   source_archive_object = google_storage_bucket_object.zipped_code.name
 
-  available_memory_mb = 4098
+  available_memory_mb = 4096
 
   trigger_http = true
   entry_point  = "main"
@@ -142,7 +142,7 @@ resource "google_cloudfunctions_function" "gee_ndmi_function" {
   source_archive_bucket = google_storage_bucket.function_bucket.name
   source_archive_object = google_storage_bucket_object.ndmi_zipped_code.name
 
-  available_memory_mb = 4098
+  available_memory_mb = 4096
 
   trigger_http = true
   entry_point  = "main"
