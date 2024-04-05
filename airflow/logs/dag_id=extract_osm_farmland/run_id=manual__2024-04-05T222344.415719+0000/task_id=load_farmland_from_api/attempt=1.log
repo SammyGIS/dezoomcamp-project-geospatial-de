@@ -1,0 +1,68 @@
+[2024-04-05T22:23:47.083+0000] {taskinstance.py:1979} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: extract_osm_farmland.load_farmland_from_api manual__2024-04-05T22:23:44.415719+00:00 [queued]>
+[2024-04-05T22:23:47.093+0000] {taskinstance.py:1979} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: extract_osm_farmland.load_farmland_from_api manual__2024-04-05T22:23:44.415719+00:00 [queued]>
+[2024-04-05T22:23:47.093+0000] {taskinstance.py:2193} INFO - Starting attempt 1 of 2
+[2024-04-05T22:23:47.110+0000] {taskinstance.py:2217} INFO - Executing <Task(_PythonDecoratedOperator): load_farmland_from_api> on 2024-04-05 22:23:44.415719+00:00
+[2024-04-05T22:23:47.116+0000] {standard_task_runner.py:60} INFO - Started process 1538 to run task
+[2024-04-05T22:23:47.120+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'extract_osm_farmland', 'load_farmland_from_api', 'manual__2024-04-05T22:23:44.415719+00:00', '--job-id', '277', '--raw', '--subdir', 'DAGS_FOLDER/extract_file_data_from_osm.py', '--cfg-path', '/tmp/tmpv5z5ryr7']
+[2024-04-05T22:23:47.121+0000] {standard_task_runner.py:88} INFO - Job 277: Subtask load_farmland_from_api
+[2024-04-05T22:23:47.175+0000] {task_command.py:423} INFO - Running <TaskInstance: extract_osm_farmland.load_farmland_from_api manual__2024-04-05T22:23:44.415719+00:00 [running]> on host 2adb4d880117
+[2024-04-05T22:23:47.284+0000] {taskinstance.py:2513} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='extract_osm_farmland' AIRFLOW_CTX_TASK_ID='load_farmland_from_api' AIRFLOW_CTX_EXECUTION_DATE='2024-04-05T22:23:44.415719+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2024-04-05T22:23:44.415719+00:00'
+[2024-04-05T22:26:21.358+0000] {taskinstance.py:2731} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.8/site-packages/urllib3/response.py", line 444, in _error_catcher
+    yield
+  File "/home/airflow/.local/lib/python3.8/site-packages/urllib3/response.py", line 831, in read_chunked
+    chunk = self._handle_chunk(amt)
+  File "/home/airflow/.local/lib/python3.8/site-packages/urllib3/response.py", line 784, in _handle_chunk
+    returned_chunk = self._fp._safe_read(self.chunk_left)
+  File "/usr/local/lib/python3.8/http/client.py", line 615, in _safe_read
+    raise IncompleteRead(data, amt-len(data))
+http.client.IncompleteRead: IncompleteRead(4077 bytes read, 4019 more expected)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.8/site-packages/requests/models.py", line 816, in generate
+    yield from self.raw.stream(chunk_size, decode_content=True)
+  File "/home/airflow/.local/lib/python3.8/site-packages/urllib3/response.py", line 624, in stream
+    for line in self.read_chunked(amt, decode_content=decode_content):
+  File "/home/airflow/.local/lib/python3.8/site-packages/urllib3/response.py", line 857, in read_chunked
+    self._original_response.close()
+  File "/usr/local/lib/python3.8/contextlib.py", line 131, in __exit__
+    self.gen.throw(type, value, traceback)
+  File "/home/airflow/.local/lib/python3.8/site-packages/urllib3/response.py", line 461, in _error_catcher
+    raise ProtocolError("Connection broken: %r" % e, e)
+urllib3.exceptions.ProtocolError: ('Connection broken: IncompleteRead(4077 bytes read, 4019 more expected)', IncompleteRead(4077 bytes read, 4019 more expected))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/models/taskinstance.py", line 444, in _execute_task
+    result = _execute_callable(context=context, **execute_callable_kwargs)
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/models/taskinstance.py", line 414, in _execute_callable
+    return execute_callable(context=context, **execute_callable_kwargs)
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/decorators/base.py", line 241, in execute
+    return_value = super().execute(context)
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/operators/python.py", line 200, in execute
+    return_value = self.execute_callable()
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/operators/python.py", line 217, in execute_callable
+    return self.python_callable(*self.op_args, **self.op_kwargs)
+  File "/opt/airflow/dags/extract_file_data_from_osm.py", line 59, in load_farmland_from_api
+    response = requests.get(OVERPASS_URL, params={'data': OVERPASS_QUERY})
+  File "/home/airflow/.local/lib/python3.8/site-packages/requests/api.py", line 73, in get
+    return request("get", url, params=params, **kwargs)
+  File "/home/airflow/.local/lib/python3.8/site-packages/requests/api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/home/airflow/.local/lib/python3.8/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/home/airflow/.local/lib/python3.8/site-packages/requests/sessions.py", line 747, in send
+    r.content
+  File "/home/airflow/.local/lib/python3.8/site-packages/requests/models.py", line 899, in content
+    self._content = b"".join(self.iter_content(CONTENT_CHUNK_SIZE)) or b""
+  File "/home/airflow/.local/lib/python3.8/site-packages/requests/models.py", line 818, in generate
+    raise ChunkedEncodingError(e)
+requests.exceptions.ChunkedEncodingError: ('Connection broken: IncompleteRead(4077 bytes read, 4019 more expected)', IncompleteRead(4077 bytes read, 4019 more expected))
+[2024-04-05T22:26:21.386+0000] {taskinstance.py:1149} INFO - Marking task as UP_FOR_RETRY. dag_id=extract_osm_farmland, task_id=load_farmland_from_api, execution_date=20240405T222344, start_date=20240405T222347, end_date=20240405T222621
+[2024-04-05T22:26:21.403+0000] {standard_task_runner.py:107} ERROR - Failed to execute job 277 for task load_farmland_from_api (('Connection broken: IncompleteRead(4077 bytes read, 4019 more expected)', IncompleteRead(4077 bytes read, 4019 more expected)); 1538)
+[2024-04-05T22:26:21.423+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 1
+[2024-04-05T22:26:21.448+0000] {taskinstance.py:3312} INFO - 0 downstream tasks scheduled from follow-on schedule check

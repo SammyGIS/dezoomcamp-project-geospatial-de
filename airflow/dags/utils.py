@@ -37,7 +37,7 @@ def download_geodataframe_from_gcs(bucket_name, file_path):
     gdf = gpd.read_file(io.BytesIO(data))
     return gdf
 
-def convert_gdf_bqfeatures(geojson_gdf):
+def geodataframe_to_json_dict(geojson_gdf):
     try:
         # Convert GeoDataFrame to GeoJSON string
         geojson_str = geojson_gdf.to_json()
@@ -58,30 +58,37 @@ def convert_gdf_bqfeatures(geojson_gdf):
         return None
 
 def upload_features_to_bigquery(table_id, bucket_name, blob_path, json_credentials_path):
-    # Initialize BigQuery and GCS clients using service account credentials
-    bigquery_client = bigquery.Client.from_service_account_json(json_credentials_path)
+    try:
+        # Initialize BigQuery and GCS clients using service account credentials
+        bigquery_client = bigquery.Client.from_service_account_json(json_credentials_path)
 
-    # Download GeoDataFrame from GCS
-    geojson_gdf = download_geodataframe_from_gcs(bucket_name, blob_path)
-    
-    # convert geodataframe to bq loadables features
-    json_features = convert_gdf_bqfeatures(geojson_gdf)
+        # Download GeoDataFrame from GCS
+        geojson_gdf = download_geodataframe_from_gcs(bucket_name, blob_path)
         
-    # Upload JSON features to BigQuery (Append to existing table)
-    job_config = bigquery.LoadJobConfig(
-        source_format=bigquery.SourceFormat.NEWLINE_DELIMITED_JSON,
-        autodetect=True,
-        write_disposition=bigquery.WriteDisposition.WRITE_TRUNCATE,
-    )
+        # Convert GeoDataFrame to a list of dictionaries in JSON format
+        json_features = geodataframe_to_json_dict(geojson_gdf)
+        
+        # Upload JSON features to BigQuery (Append to existing table)
+        job_config = bigquery.LoadJobConfig(
+            source_format=bigquery.SourceFormat.NEWLINE_DELIMITED_JSON,
+            autodetect=True,
+            write_disposition=bigquery.WriteDisposition.WRITE_TRUNCATE,
+        )
 
-    job = bigquery_client.load_table_from_json(
-        json_rows=json_features,  # Convert features to newline-delimited JSON string
-        destination=table_id,
-        job_config=job_config,
-    )
+        # Convert features to newline-delimited JSON string
+        json_string = '\n'.join(json.dumps(feature) for feature in json_features)
 
-    # Wait for the job to complete
-    job.result()
+        job = bigquery_client.load_table_from_json(
+            json_rows=json_string,
+            destination=table_id,
+            job_config=job_config,
+        )
 
-    print(f"All features uploaded to BigQuery table {table_id} successfully.")
+        # Wait for the job to complete
+        job.result()
+
+        print(f"All features uploaded to BigQuery table {table_id} successfully.")
+    
+    except Exception as e:
+        print(f"Error uploading features to BigQuery: {e}")
 
