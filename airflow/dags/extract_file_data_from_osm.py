@@ -98,7 +98,6 @@ def extract_osm_farmland():
     @task
     def load_data_tobigquery():
         try:
-            create_geo_table_bquery(TABLE_ID)
             upload_features_to_bigquery(TABLE_ID, GCS_BUCKET,GCS_RESULT_PATH)
             print(f"dataset uploaded to bigquery {TABLE_ID} successfully ")
         except Exception as e:
