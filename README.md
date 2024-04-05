@@ -19,8 +19,11 @@ Subsequently, the processed data is modeled and analyzed using BigQuery. To faci
 - **Carto Dashboard**: Offers intuitive spatial visualization capabilities, enabling interactive data exploration and analysis.
 - **Google Earth Engine**: Processes satellite imagery and computes key vegetation indices, providing valuable insights into agricultural conditions.
 
+## Architecture Diagram
+![alt text](architecture.jpg)
+
 ### Pipeline Architecture
-1. **OSM Data Digitization**: Fetches farmland data from OSM to establish baseline information.
+1. **OSM Data**: Fetches farmland data from OSM to establish baseline information.
 2. **Data Transformation and Enrichment**: Utilizes Airflow to clean and augment OSM data with administrative details for better analysis.
 3. **Data Storage**: Stores processed data and satellite imagery in Google Cloud Storage for efficient retrieval and management.
 4. **Satellite Imagery Acquisition**: Utilizes Google Earth Engine to acquire Sentinel satellite imagery for specified areas.
@@ -36,5 +39,9 @@ Subsequently, the processed data is modeled and analyzed using BigQuery. To faci
 - **Big Data Analytics**: Leveraging BigQuery allows for efficient querying and analysis of large datasets.
 - **Interactive Dashboard**: Utilizing Carto Dashboard facilitates visualization of spatial data, aiding in monitoring and decision-making.
 
-### Conclusion
-FarmWatch streamlines the process of monitoring agricultural lands by integrating satellite imagery analysis with spatial data processing and visualization. By automating data collection, processing, and visualization, FarmWatch empowers stakeholders with actionable insights to optimize agricultural practices and ensure environmental sustainability.
+### References
+https://medium.com/cloud-native-daily/deploy-cloud-functions-on-gcp-with-terraform-c6026be9d645
+https://medium.com/geekculture/setup-gcp-cloud-functions-triggering-by-cloud-schedulers-with-terraform-1433fbf1abbe
+https://cloud.google.com/bigquery/docs/geospatial-data#:~:text=Loading%20GeoJSON%20geometry%20data&text=To%20load%20this%20type%20of,data%20as%20a%20STRING%20value
+https://mihaibojin.medium.com/deploy-and-configure-google-compute-engine-vms-with-terraform-f6b708b226c1
+https://www.youtube.com/watch?v=49C7eE_mhm4
