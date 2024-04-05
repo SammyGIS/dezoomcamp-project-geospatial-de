@@ -8,7 +8,6 @@ from airflow.decorators import dag, task
 from airflow.models import Variable
 from utils import  (download_geodataframe_from_gcs,
                     upload_geodataframe_to_gcs,
-                    create_geo_table_bquery,
                     upload_features_to_bigquery)
 import io
 
@@ -85,10 +84,12 @@ def extract_osm_farmland():
         
         url = 'https://raw.githubusercontent.com/SammyGIS/data/main/Nigeria_Ward.geojson'
         ward_shapefile = gpd.read_file(url)
-        ward_shapefile.drop(columns=['lgacode','statecode','source','wardcode', 'FID_1'], axis=1, inplace=True)
+        ward_shapefile.drop(columns=['lgacode','statecode','source','wardcode', 'FID_1'],
+                             axis=1, inplace=True)
         ward_shapefile.to_crs(epsg=4326, inplace=True)
         gdf_joined = farm_gdf.sjoin(ward_shapefile, how='inner')
-        gdf_joined = gdf_joined [['id', 'statename', 'lganame', 'wardname', 'urban', 'landuse', 'geometry']]
+        gdf_joined = gdf_joined [['id', 'statename', 'lganame', 'wardname', 'urban', 
+                                  'landuse', 'geometry']]
 
         # Save transformed GeoDataFrame to GCS
         upload_geodataframe_to_gcs(gdf_joined, GCS_BUCKET, GCS_RESULT_PATH)

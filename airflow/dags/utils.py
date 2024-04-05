@@ -37,45 +37,25 @@ def download_geodataframe_from_gcs(bucket_name, file_path):
     gdf = gpd.read_file(io.BytesIO(data))
     return gdf
 
-
-def create_geo_table_bquery(table_id):
-    # Construct a BigQuery client object.
-    client = bigquery.Client.from_service_account_json(json_credentials_path)
-
-    schema = [
-        bigquery.SchemaField("id", "INTEGER"),
-        bigquery.SchemaField("statename", "STRING"),
-        bigquery.SchemaField("lganame", "STRING"),
-        bigquery.SchemaField("wardname", "STRING"),
-        bigquery.SchemaField("urban", "STRING"),
-        bigquery.SchemaField("landuse", "STRING"),
-        bigquery.SchemaField("geometry", "GEOGRAPHY")
-    ]
-
-    table = bigquery.Table(table_id, schema=schema)
-    table = client.create_table(table)  # Make an API request.
-    print(
-        "Created table {}.{}.{}".format(table.project, table.dataset_id, table.table_id)
-    )
-
 def convert_gdf_bqfeatures(geojson_gdf):
-    # Convert GeoDataFrame to GeoJSON string
-    geojson_string = geojson_gdf.to_json()
-    geojson_data = json.loads(geojson_string)
+    try:
+        # Convert GeoDataFrame to GeoJSON string
+        geojson_str = geojson_gdf.to_json()
 
-    json_features = []
-    
-    # Check if the GeoJSON is a FeatureCollection
-    if geojson_data['type'] == 'FeatureCollection':
-        features = geojson_data['features']
-        
-        # Append each feature to the list
-        for feature in features:
-            json_features.append(json.dumps(feature))
-        
-        return json_features
-    else:
-        print("The GeoJSON file is not a FeatureCollection.")
+        # Parse GeoJSON string to Python dictionary
+        data = json.loads(geojson_str)
+
+        # Check if the GeoJSON is a FeatureCollection
+        if data['type'] == 'FeatureCollection':
+            features = data['features']
+            return features
+        else:
+            print("The GeoDataFrame does not contain a FeatureCollection.")
+            return None
+
+    except Exception as e:
+        print("Error while converting GeoDataFrame to JSON dictionary:", e)
+        return None
 
 def upload_features_to_bigquery(table_id, bucket_name, blob_path, json_credentials_path):
     # Initialize BigQuery and GCS clients using service account credentials
@@ -90,8 +70,8 @@ def upload_features_to_bigquery(table_id, bucket_name, blob_path, json_credentia
     # Upload JSON features to BigQuery (Append to existing table)
     job_config = bigquery.LoadJobConfig(
         source_format=bigquery.SourceFormat.NEWLINE_DELIMITED_JSON,
-        autodetect=False,
-        write_disposition=bigquery.WriteDisposition.WRITE_APPEND,
+        autodetect=True,
+        write_disposition=bigquery.WriteDisposition.WRITE_TRUNCATE,
     )
 
     job = bigquery_client.load_table_from_json(
