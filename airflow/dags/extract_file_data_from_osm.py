@@ -6,7 +6,7 @@ import osm2geojson
 import geopandas as gpd
 from airflow.decorators import dag, task
 from airflow.models import Variable
-from utils import download_geodataframe_from_gcs,upload_geodataframe_to_gcs,upload_geojson_to_bigquery
+from utils import download_geodataframe_from_gcs,upload_geodataframe_to_gcs,create_geo_table_bquery
 import io
 
 # Define the Overpass URL
@@ -38,7 +38,7 @@ default_args = {
 GCS_BUCKET = Variable.get("gcs_bucket")  # Get GCS bucket name from Airflow Variables
 GCS_INTERMEDIATE_PATH = "osm_farmland.geojson"
 GCS_RESULT_PATH = "Nigeria_farmland.geojson"
-TABLE_ID = "farm_dataset"
+TABLE_ID = "data-enginerring-zoomcamp.farm_dataset.farm_boundary"
 
 
 # Define the DAG
@@ -94,8 +94,9 @@ def extract_osm_farmland():
     @task
     def load_data_tobigquery():
         try:
-            upload_geojson_to_bigquery(TABLE_ID, GCS_BUCKET,GCS_RESULT_PATH)
-            print(f"dataset upload got bigquery {TABLE_ID} successfully ")
+            create_geo_table_bquery(TABLE_ID)
+            #upload_features_to_bigquery(TABLE_ID, GCS_BUCKET,GCS_RESULT_PATH)
+            print(f"dataset uploaded to bigquery {TABLE_ID} successfully ")
         except Exception as e:
             print(e)
         

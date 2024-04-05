@@ -1,7 +1,7 @@
 import geopandas as gpd
 from google.cloud import storage
 from google.cloud import bigquery
-import geojson
+import json
 import io
 
 # Specify the path to your service account JSON credentials
@@ -38,41 +38,50 @@ def download_geodataframe_from_gcs(bucket_name, file_path):
     return gdf
 
 
-def upload_geojson_to_bigquery(table_id, bucket_name, blob_path, json_credentials_path):
-    # Initialize BigQuery and GCS clients using service account credentials
-    bigquery_client = bigquery.Client.from_service_account_json(json_credentials_path)
-    storage_client = storage.Client.from_service_account_json(json_credentials_path)
-    
-    # Get the GeoJSON data from GCS
-    bucket = storage_client.bucket(bucket_name)
-    blob = bucket.blob(blob_path)
-    geojson_data = blob.download_as_string().decode('utf-8')
-    geojson_lines = geojson_data.splitlines()
 
-    # Define schema for BigQuery table
+def create_geo_table_bquery(table_id):
+    # Construct a BigQuery client object.
+    client = bigquery.Client.from_service_account_json(json_credentials_path)
+
     schema = [
         bigquery.SchemaField("id", "INTEGER"),
         bigquery.SchemaField("statename", "STRING"),
         bigquery.SchemaField("lganame", "STRING"),
         bigquery.SchemaField("wardname", "STRING"),
-        bigquery.SchemaField("urban", "BOOLEAN"),
+        bigquery.SchemaField("urban", "STRING"),
         bigquery.SchemaField("landuse", "STRING"),
-        bigquery.SchemaField("NDMI", "FLOAT"),  # Assuming NDMI is a float value
         bigquery.SchemaField("geometry", "GEOGRAPHY")
     ]
 
-    # Load GeoJSON lines into BigQuery
-    job_config = bigquery.LoadJobConfig(
-        schema=schema,
-        source_format=bigquery.SourceFormat.NEWLINE_DELIMITED_JSON,
-    )
-    job = bigquery_client.load_table_from_json(
-        geojson_lines, table_id, job_config=job_config
+    table = bigquery.Table(table_id, schema=schema)
+    table = client.create_table(table)  # Make an API request.
+    print(
+        "Created table {}.{}.{}".format(table.project, table.dataset_id, table.table_id)
     )
 
-    # Wait for the job to complete
-    job.result()
+# def upload_features_to_bigquery(table_id, bucket_name, blob_path):
+#     # Initialize BigQuery and GCS clients using service account credentials
+#     bigquery_client = bigquery.Client.from_service_account_json(json_credentials_path)
+#     create_geo_table_bquery(table_id)
+#     geojson_gdf = download_geodataframe_from_gcs(bucket_name, blob_path)
 
-    print(f"Data uploaded from GCS bucket '{bucket_name}' and file '{blob_path}' to BigQuery table '{table_id}'.")
+#     # Loop through each feature in the GeoDataFrame and upload it to BigQuery
+#     for feature in geojson_gdf.iterfeatures():
+#         # Convert feature to GeoJSON
+#         geojson_feature = json.dumps(feature)
 
+#         # Upload JSON feature to BigQuery
+#         job_config = bigquery.LoadJobConfig(
+#             source_format=bigquery.SourceFormat.NEWLINE_DELIMITED_JSON,
+#             autodetect=True,
+#         )
+#         job = bigquery_client.load_table_from_json(
+#             json_rows=geojson_feature,
+#             destination=table_id,
+#             job_config=job_config,
+#         )
 
+#         # Wait for the job to complete
+#         job.result()
+
+#     print(f"All features uploaded to BigQuery table {table_id} successfully.")
