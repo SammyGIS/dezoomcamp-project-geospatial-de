@@ -1,0 +1,68 @@
+[2024-04-05T20:48:44.928+0000] {taskinstance.py:1979} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: extract_osm_farmland.transform_load_togcs manual__2024-04-05T20:47:05.583067+00:00 [queued]>
+[2024-04-05T20:48:44.937+0000] {taskinstance.py:1979} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: extract_osm_farmland.transform_load_togcs manual__2024-04-05T20:47:05.583067+00:00 [queued]>
+[2024-04-05T20:48:44.938+0000] {taskinstance.py:2193} INFO - Starting attempt 1 of 2
+[2024-04-05T20:48:44.956+0000] {taskinstance.py:2217} INFO - Executing <Task(_PythonDecoratedOperator): transform_load_togcs> on 2024-04-05 20:47:05.583067+00:00
+[2024-04-05T20:48:44.961+0000] {standard_task_runner.py:60} INFO - Started process 163 to run task
+[2024-04-05T20:48:44.964+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'extract_osm_farmland', 'transform_load_togcs', 'manual__2024-04-05T20:47:05.583067+00:00', '--job-id', '274', '--raw', '--subdir', 'DAGS_FOLDER/extract_file_data_from_osm.py', '--cfg-path', '/tmp/tmp4fefmth4']
+[2024-04-05T20:48:44.966+0000] {standard_task_runner.py:88} INFO - Job 274: Subtask transform_load_togcs
+[2024-04-05T20:48:45.023+0000] {task_command.py:423} INFO - Running <TaskInstance: extract_osm_farmland.transform_load_togcs manual__2024-04-05T20:47:05.583067+00:00 [running]> on host 2adb4d880117
+[2024-04-05T20:48:45.109+0000] {taskinstance.py:2513} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='extract_osm_farmland' AIRFLOW_CTX_TASK_ID='transform_load_togcs' AIRFLOW_CTX_EXECUTION_DATE='2024-04-05T20:47:05.583067+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2024-04-05T20:47:05.583067+00:00'
+[2024-04-05T20:57:52.332+0000] {taskinstance.py:2731} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/models/taskinstance.py", line 444, in _execute_task
+    result = _execute_callable(context=context, **execute_callable_kwargs)
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/models/taskinstance.py", line 414, in _execute_callable
+    return execute_callable(context=context, **execute_callable_kwargs)
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/decorators/base.py", line 241, in execute
+    return_value = super().execute(context)
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/operators/python.py", line 200, in execute
+    return_value = self.execute_callable()
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/operators/python.py", line 217, in execute_callable
+    return self.python_callable(*self.op_args, **self.op_kwargs)
+  File "/opt/airflow/dags/extract_file_data_from_osm.py", line 84, in transform_load_togcs
+    farm_gdf = download_geodataframe_from_gcs(GCS_BUCKET, GCS_INTERMEDIATE_PATH)
+  File "/opt/airflow/dags/utils.py", line 36, in download_geodataframe_from_gcs
+    data = blob.download_as_string()
+  File "/home/airflow/.local/lib/python3.8/site-packages/google/cloud/storage/blob.py", line 1550, in download_as_string
+    return self.download_as_bytes(
+  File "/home/airflow/.local/lib/python3.8/site-packages/google/cloud/storage/blob.py", line 1435, in download_as_bytes
+    self._prep_and_do_download(
+  File "/home/airflow/.local/lib/python3.8/site-packages/google/cloud/storage/blob.py", line 4362, in _prep_and_do_download
+    self._do_download(
+  File "/home/airflow/.local/lib/python3.8/site-packages/google/cloud/storage/blob.py", line 1017, in _do_download
+    response = download.consume(transport, timeout=timeout)
+  File "/home/airflow/.local/lib/python3.8/site-packages/google/resumable_media/requests/download.py", line 237, in consume
+    return _request_helpers.wait_and_retry(
+  File "/home/airflow/.local/lib/python3.8/site-packages/google/resumable_media/requests/_request_helpers.py", line 155, in wait_and_retry
+    response = func()
+  File "/home/airflow/.local/lib/python3.8/site-packages/google/resumable_media/requests/download.py", line 233, in retriable_request
+    self._write_to_stream(result)
+  File "/home/airflow/.local/lib/python3.8/site-packages/google/resumable_media/requests/download.py", line 141, in _write_to_stream
+    raise common.DataCorruption(response, msg)
+google.resumable_media.common.DataCorruption: Checksum mismatch while downloading:
+
+  https://storage.googleapis.com/download/storage/v1/b/sammy_project_bucket2024/o/osm_farmland.geojson?alt=media
+
+The X-Goog-Hash header indicated an MD5 checksum of:
+
+  bAZBnj0eYIvwx4GR107HOQ==
+
+but the actual MD5 checksum of the downloaded contents was:
+
+  ytZUlhD9XulmScJDpgQthg==
+
+[2024-04-05T20:57:52.393+0000] {taskinstance.py:1149} INFO - Marking task as UP_FOR_RETRY. dag_id=extract_osm_farmland, task_id=transform_load_togcs, execution_date=20240405T204705, start_date=20240405T204844, end_date=20240405T205752
+[2024-04-05T20:57:52.428+0000] {standard_task_runner.py:107} ERROR - Failed to execute job 274 for task transform_load_togcs (Checksum mismatch while downloading:
+
+  https://storage.googleapis.com/download/storage/v1/b/sammy_project_bucket2024/o/osm_farmland.geojson?alt=media
+
+The X-Goog-Hash header indicated an MD5 checksum of:
+
+  bAZBnj0eYIvwx4GR107HOQ==
+
+but the actual MD5 checksum of the downloaded contents was:
+
+  ytZUlhD9XulmScJDpgQthg==
+; 163)
+[2024-04-05T20:57:52.452+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 1
+[2024-04-05T20:57:52.477+0000] {taskinstance.py:3312} INFO - 0 downstream tasks scheduled from follow-on schedule check

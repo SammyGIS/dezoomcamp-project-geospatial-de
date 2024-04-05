@@ -38,7 +38,6 @@ def download_geodataframe_from_gcs(bucket_name, file_path):
     return gdf
 
 
-
 def create_geo_table_bquery(table_id):
     # Construct a BigQuery client object.
     client = bigquery.Client.from_service_account_json(json_credentials_path)
@@ -59,29 +58,50 @@ def create_geo_table_bquery(table_id):
         "Created table {}.{}.{}".format(table.project, table.dataset_id, table.table_id)
     )
 
-# def upload_features_to_bigquery(table_id, bucket_name, blob_path):
-#     # Initialize BigQuery and GCS clients using service account credentials
-#     bigquery_client = bigquery.Client.from_service_account_json(json_credentials_path)
-#     create_geo_table_bquery(table_id)
-#     geojson_gdf = download_geodataframe_from_gcs(bucket_name, blob_path)
+def convert_gdf_bqfeatures(geojson_gdf):
+    # Convert GeoDataFrame to GeoJSON string
+    geojson_string = geojson_gdf.to_json()
+    geojson_data = json.loads(geojson_string)
 
-#     # Loop through each feature in the GeoDataFrame and upload it to BigQuery
-#     for feature in geojson_gdf.iterfeatures():
-#         # Convert feature to GeoJSON
-#         geojson_feature = json.dumps(feature)
+    json_features = []
+    
+    # Check if the GeoJSON is a FeatureCollection
+    if geojson_data['type'] == 'FeatureCollection':
+        features = geojson_data['features']
+        
+        # Append each feature to the list
+        for feature in features:
+            json_features.append(json.dumps(feature))
+        
+        return json_features
+    else:
+        print("The GeoJSON file is not a FeatureCollection.")
 
-#         # Upload JSON feature to BigQuery
-#         job_config = bigquery.LoadJobConfig(
-#             source_format=bigquery.SourceFormat.NEWLINE_DELIMITED_JSON,
-#             autodetect=True,
-#         )
-#         job = bigquery_client.load_table_from_json(
-#             json_rows=geojson_feature,
-#             destination=table_id,
-#             job_config=job_config,
-#         )
+def upload_features_to_bigquery(table_id, bucket_name, blob_path, json_credentials_path):
+    # Initialize BigQuery and GCS clients using service account credentials
+    bigquery_client = bigquery.Client.from_service_account_json(json_credentials_path)
 
-#         # Wait for the job to complete
-#         job.result()
+    # Download GeoDataFrame from GCS
+    geojson_gdf = download_geodataframe_from_gcs(bucket_name, blob_path)
+    
+    # convert geodataframe to bq loadables features
+    json_features = convert_gdf_bqfeatures(geojson_gdf)
+        
+    # Upload JSON features to BigQuery (Append to existing table)
+    job_config = bigquery.LoadJobConfig(
+        source_format=bigquery.SourceFormat.NEWLINE_DELIMITED_JSON,
+        autodetect=False,
+        write_disposition=bigquery.WriteDisposition.WRITE_APPEND,
+    )
 
-#     print(f"All features uploaded to BigQuery table {table_id} successfully.")
+    job = bigquery_client.load_table_from_json(
+        json_rows=json_features,  # Convert features to newline-delimited JSON string
+        destination=table_id,
+        job_config=job_config,
+    )
+
+    # Wait for the job to complete
+    job.result()
+
+    print(f"All features uploaded to BigQuery table {table_id} successfully.")
+

@@ -6,7 +6,10 @@ import osm2geojson
 import geopandas as gpd
 from airflow.decorators import dag, task
 from airflow.models import Variable
-from utils import download_geodataframe_from_gcs,upload_geodataframe_to_gcs,create_geo_table_bquery
+from utils import  (download_geodataframe_from_gcs,
+                    upload_geodataframe_to_gcs,
+                    create_geo_table_bquery,
+                    upload_features_to_bigquery)
 import io
 
 # Define the Overpass URL
@@ -76,7 +79,7 @@ def extract_osm_farmland():
             return None
 
     @task
-    def transform_load_togcs(farm_gdf_path):
+    def transform_load_togcs():
         # Download GeoDataFrame from GCS
         farm_gdf = download_geodataframe_from_gcs(GCS_BUCKET, GCS_INTERMEDIATE_PATH)
         
@@ -85,6 +88,7 @@ def extract_osm_farmland():
         ward_shapefile.drop(columns=['lgacode','statecode','source','wardcode', 'FID_1'], axis=1, inplace=True)
         ward_shapefile.to_crs(epsg=4326, inplace=True)
         gdf_joined = farm_gdf.sjoin(ward_shapefile, how='inner')
+        gdf_joined = gdf_joined [['id', 'statename', 'lganame', 'wardname', 'urban', 'landuse', 'geometry']]
 
         # Save transformed GeoDataFrame to GCS
         upload_geodataframe_to_gcs(gdf_joined, GCS_BUCKET, GCS_RESULT_PATH)
@@ -95,7 +99,7 @@ def extract_osm_farmland():
     def load_data_tobigquery():
         try:
             create_geo_table_bquery(TABLE_ID)
-            #upload_features_to_bigquery(TABLE_ID, GCS_BUCKET,GCS_RESULT_PATH)
+            upload_features_to_bigquery(TABLE_ID, GCS_BUCKET,GCS_RESULT_PATH)
             print(f"dataset uploaded to bigquery {TABLE_ID} successfully ")
         except Exception as e:
             print(e)
@@ -103,7 +107,7 @@ def extract_osm_farmland():
         
     # Define the tasks
     get_farmland = load_farmland_from_api()
-    transform_togcs = transform_load_togcs(get_farmland)
+    transform_togcs = transform_load_togcs()
     load_geojson_tobq = load_data_tobigquery()
 
     # Set task dependencies

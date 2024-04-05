@@ -1,0 +1,113 @@
+[2024-04-05T19:36:11.338+0000] {taskinstance.py:1979} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: extract_osm_farmland.load_farmland_from_api manual__2024-04-05T19:34:18.972487+00:00 [queued]>
+[2024-04-05T19:36:11.346+0000] {taskinstance.py:1979} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: extract_osm_farmland.load_farmland_from_api manual__2024-04-05T19:34:18.972487+00:00 [queued]>
+[2024-04-05T19:36:11.347+0000] {taskinstance.py:2193} INFO - Starting attempt 2 of 2
+[2024-04-05T19:36:11.361+0000] {taskinstance.py:2217} INFO - Executing <Task(_PythonDecoratedOperator): load_farmland_from_api> on 2024-04-05 19:34:18.972487+00:00
+[2024-04-05T19:36:11.368+0000] {standard_task_runner.py:60} INFO - Started process 9002 to run task
+[2024-04-05T19:36:11.371+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'extract_osm_farmland', 'load_farmland_from_api', 'manual__2024-04-05T19:34:18.972487+00:00', '--job-id', '261', '--raw', '--subdir', 'DAGS_FOLDER/extract_file_data_from_osm.py', '--cfg-path', '/tmp/tmphlisgfm9']
+[2024-04-05T19:36:11.373+0000] {standard_task_runner.py:88} INFO - Job 261: Subtask load_farmland_from_api
+[2024-04-05T19:36:11.422+0000] {task_command.py:423} INFO - Running <TaskInstance: extract_osm_farmland.load_farmland_from_api manual__2024-04-05T19:34:18.972487+00:00 [running]> on host 2adb4d880117
+[2024-04-05T19:36:11.505+0000] {taskinstance.py:2513} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='extract_osm_farmland' AIRFLOW_CTX_TASK_ID='load_farmland_from_api' AIRFLOW_CTX_EXECUTION_DATE='2024-04-05T19:34:18.972487+00:00' AIRFLOW_CTX_TRY_NUMBER='2' AIRFLOW_CTX_DAG_RUN_ID='manual__2024-04-05T19:34:18.972487+00:00'
+[2024-04-05T19:36:35.972+0000] {collection.py:293} WARNING - Skipping field nodes: invalid type 13
+[2024-04-05T19:38:02.664+0000] {taskinstance.py:2731} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.8/site-packages/urllib3/connectionpool.py", line 715, in urlopen
+    httplib_response = self._make_request(
+  File "/home/airflow/.local/lib/python3.8/site-packages/urllib3/connectionpool.py", line 467, in _make_request
+    six.raise_from(e, None)
+  File "<string>", line 3, in raise_from
+  File "/home/airflow/.local/lib/python3.8/site-packages/urllib3/connectionpool.py", line 462, in _make_request
+    httplib_response = conn.getresponse()
+  File "/usr/local/lib/python3.8/http/client.py", line 1348, in getresponse
+    response.begin()
+  File "/usr/local/lib/python3.8/http/client.py", line 316, in begin
+    version, status, reason = self._read_status()
+  File "/usr/local/lib/python3.8/http/client.py", line 277, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+  File "/usr/local/lib/python3.8/socket.py", line 669, in readinto
+    return self._sock.recv_into(b)
+  File "/usr/local/lib/python3.8/ssl.py", line 1274, in recv_into
+    return self.read(nbytes, buffer)
+  File "/usr/local/lib/python3.8/ssl.py", line 1132, in read
+    return self._sslobj.read(len, buffer)
+ConnectionResetError: [Errno 104] Connection reset by peer
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.8/site-packages/requests/adapters.py", line 486, in send
+    resp = conn.urlopen(
+  File "/home/airflow/.local/lib/python3.8/site-packages/urllib3/connectionpool.py", line 799, in urlopen
+    retries = retries.increment(
+  File "/home/airflow/.local/lib/python3.8/site-packages/urllib3/util/retry.py", line 550, in increment
+    raise six.reraise(type(error), error, _stacktrace)
+  File "/home/airflow/.local/lib/python3.8/site-packages/urllib3/packages/six.py", line 769, in reraise
+    raise value.with_traceback(tb)
+  File "/home/airflow/.local/lib/python3.8/site-packages/urllib3/connectionpool.py", line 715, in urlopen
+    httplib_response = self._make_request(
+  File "/home/airflow/.local/lib/python3.8/site-packages/urllib3/connectionpool.py", line 467, in _make_request
+    six.raise_from(e, None)
+  File "<string>", line 3, in raise_from
+  File "/home/airflow/.local/lib/python3.8/site-packages/urllib3/connectionpool.py", line 462, in _make_request
+    httplib_response = conn.getresponse()
+  File "/usr/local/lib/python3.8/http/client.py", line 1348, in getresponse
+    response.begin()
+  File "/usr/local/lib/python3.8/http/client.py", line 316, in begin
+    version, status, reason = self._read_status()
+  File "/usr/local/lib/python3.8/http/client.py", line 277, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+  File "/usr/local/lib/python3.8/socket.py", line 669, in readinto
+    return self._sock.recv_into(b)
+  File "/usr/local/lib/python3.8/ssl.py", line 1274, in recv_into
+    return self.read(nbytes, buffer)
+  File "/usr/local/lib/python3.8/ssl.py", line 1132, in read
+    return self._sslobj.read(len, buffer)
+urllib3.exceptions.ProtocolError: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/models/taskinstance.py", line 444, in _execute_task
+    result = _execute_callable(context=context, **execute_callable_kwargs)
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/models/taskinstance.py", line 414, in _execute_callable
+    return execute_callable(context=context, **execute_callable_kwargs)
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/decorators/base.py", line 241, in execute
+    return_value = super().execute(context)
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/operators/python.py", line 200, in execute
+    return_value = self.execute_callable()
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/operators/python.py", line 217, in execute_callable
+    return self.python_callable(*self.op_args, **self.op_kwargs)
+  File "/opt/airflow/dags/extract_file_data_from_osm.py", line 73, in load_farmland_from_api
+    upload_geodataframe_to_gcs(farm_gdf, GCS_BUCKET, GCS_INTERMEDIATE_PATH)
+  File "/opt/airflow/dags/utils.py", line 27, in upload_geodataframe_to_gcs
+    blob.upload_from_string(geojson_str)
+  File "/home/airflow/.local/lib/python3.8/site-packages/google/cloud/storage/blob.py", line 3089, in upload_from_string
+    self.upload_from_file(
+  File "/home/airflow/.local/lib/python3.8/site-packages/google/cloud/storage/blob.py", line 2796, in upload_from_file
+    self._prep_and_do_upload(
+  File "/home/airflow/.local/lib/python3.8/site-packages/google/cloud/storage/blob.py", line 2637, in _prep_and_do_upload
+    created_json = self._do_upload(
+  File "/home/airflow/.local/lib/python3.8/site-packages/google/cloud/storage/blob.py", line 2443, in _do_upload
+    response = self._do_multipart_upload(
+  File "/home/airflow/.local/lib/python3.8/site-packages/google/cloud/storage/blob.py", line 1956, in _do_multipart_upload
+    response = upload.transmit(
+  File "/home/airflow/.local/lib/python3.8/site-packages/google/resumable_media/requests/upload.py", line 153, in transmit
+    return _request_helpers.wait_and_retry(
+  File "/home/airflow/.local/lib/python3.8/site-packages/google/resumable_media/requests/_request_helpers.py", line 178, in wait_and_retry
+    raise error
+  File "/home/airflow/.local/lib/python3.8/site-packages/google/resumable_media/requests/_request_helpers.py", line 155, in wait_and_retry
+    response = func()
+  File "/home/airflow/.local/lib/python3.8/site-packages/google/resumable_media/requests/upload.py", line 145, in retriable_request
+    result = transport.request(
+  File "/home/airflow/.local/lib/python3.8/site-packages/google/auth/transport/requests.py", line 541, in request
+    response = super(AuthorizedSession, self).request(
+  File "/home/airflow/.local/lib/python3.8/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/home/airflow/.local/lib/python3.8/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "/home/airflow/.local/lib/python3.8/site-packages/requests/adapters.py", line 501, in send
+    raise ConnectionError(err, request=request)
+requests.exceptions.ConnectionError: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))
+[2024-04-05T19:38:02.695+0000] {taskinstance.py:1149} INFO - Marking task as FAILED. dag_id=extract_osm_farmland, task_id=load_farmland_from_api, execution_date=20240405T193418, start_date=20240405T193611, end_date=20240405T193802
+[2024-04-05T19:38:02.712+0000] {standard_task_runner.py:107} ERROR - Failed to execute job 261 for task load_farmland_from_api (('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer')); 9002)
+[2024-04-05T19:38:02.751+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 1
+[2024-04-05T19:38:02.788+0000] {taskinstance.py:3312} INFO - 0 downstream tasks scheduled from follow-on schedule check

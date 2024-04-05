@@ -1,0 +1,49 @@
+[2024-04-05T19:54:41.630+0000] {taskinstance.py:1979} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: extract_osm_farmland.transform_load_togcs manual__2024-04-05T19:45:30.485090+00:00 [queued]>
+[2024-04-05T19:54:41.640+0000] {taskinstance.py:1979} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: extract_osm_farmland.transform_load_togcs manual__2024-04-05T19:45:30.485090+00:00 [queued]>
+[2024-04-05T19:54:41.640+0000] {taskinstance.py:2193} INFO - Starting attempt 1 of 2
+[2024-04-05T19:54:41.658+0000] {taskinstance.py:2217} INFO - Executing <Task(_PythonDecoratedOperator): transform_load_togcs> on 2024-04-05 19:45:30.485090+00:00
+[2024-04-05T19:54:41.666+0000] {standard_task_runner.py:60} INFO - Started process 9283 to run task
+[2024-04-05T19:54:41.669+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'extract_osm_farmland', 'transform_load_togcs', 'manual__2024-04-05T19:45:30.485090+00:00', '--job-id', '267', '--raw', '--subdir', 'DAGS_FOLDER/extract_file_data_from_osm.py', '--cfg-path', '/tmp/tmpaxsxq8wm']
+[2024-04-05T19:54:41.671+0000] {standard_task_runner.py:88} INFO - Job 267: Subtask transform_load_togcs
+[2024-04-05T19:54:41.720+0000] {task_command.py:423} INFO - Running <TaskInstance: extract_osm_farmland.transform_load_togcs manual__2024-04-05T19:45:30.485090+00:00 [running]> on host 2adb4d880117
+[2024-04-05T19:54:41.807+0000] {taskinstance.py:2513} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='extract_osm_farmland' AIRFLOW_CTX_TASK_ID='transform_load_togcs' AIRFLOW_CTX_EXECUTION_DATE='2024-04-05T19:45:30.485090+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2024-04-05T19:45:30.485090+00:00'
+[2024-04-05T20:09:17.860+0000] {collection.py:243} ERROR - At line 2897, character 4720: Unterminated object
+[2024-04-05T20:09:17.861+0000] {collection.py:243} ERROR - Failed to read GeoJSON data
+[2024-04-05T20:09:17.862+0000] {taskinstance.py:2731} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "fiona/ogrext.pyx", line 136, in fiona.ogrext.gdal_open_vector
+  File "fiona/_err.pyx", line 291, in fiona._err.exc_wrap_pointer
+fiona._err.CPLE_OpenFailedError: Failed to read GeoJSON data
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/models/taskinstance.py", line 444, in _execute_task
+    result = _execute_callable(context=context, **execute_callable_kwargs)
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/models/taskinstance.py", line 414, in _execute_callable
+    return execute_callable(context=context, **execute_callable_kwargs)
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/decorators/base.py", line 241, in execute
+    return_value = super().execute(context)
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/operators/python.py", line 200, in execute
+    return_value = self.execute_callable()
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/operators/python.py", line 217, in execute_callable
+    return self.python_callable(*self.op_args, **self.op_kwargs)
+  File "/opt/airflow/dags/extract_file_data_from_osm.py", line 87, in transform_load_togcs
+    ward_shapefile = gpd.read_file(url)
+  File "/home/airflow/.local/lib/python3.8/site-packages/geopandas/io/file.py", line 281, in _read_file
+    return _read_file_fiona(
+  File "/home/airflow/.local/lib/python3.8/site-packages/geopandas/io/file.py", line 322, in _read_file_fiona
+    with reader(path_or_bytes, **kwargs) as features:
+  File "/home/airflow/.local/lib/python3.8/site-packages/fiona/env.py", line 457, in wrapper
+    return f(*args, **kwds)
+  File "/home/airflow/.local/lib/python3.8/site-packages/fiona/__init__.py", line 292, in open
+    colxn = Collection(
+  File "/home/airflow/.local/lib/python3.8/site-packages/fiona/collection.py", line 243, in __init__
+    self.session.start(self, **kwargs)
+  File "fiona/ogrext.pyx", line 588, in fiona.ogrext.Session.start
+  File "fiona/ogrext.pyx", line 143, in fiona.ogrext.gdal_open_vector
+fiona.errors.DriverError: Failed to read GeoJSON data
+[2024-04-05T20:09:17.883+0000] {taskinstance.py:1149} INFO - Marking task as UP_FOR_RETRY. dag_id=extract_osm_farmland, task_id=transform_load_togcs, execution_date=20240405T194530, start_date=20240405T195441, end_date=20240405T200917
+[2024-04-05T20:09:17.909+0000] {standard_task_runner.py:107} ERROR - Failed to execute job 267 for task transform_load_togcs (Failed to read GeoJSON data; 9283)
+[2024-04-05T20:09:17.951+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 1
+[2024-04-05T20:09:17.975+0000] {taskinstance.py:3312} INFO - 0 downstream tasks scheduled from follow-on schedule check

@@ -1,0 +1,15 @@
+[2024-04-05T19:53:32.677+0000] {taskinstance.py:1979} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: extract_osm_farmland.load_farmland_from_api manual__2024-04-05T19:45:30.485090+00:00 [queued]>
+[2024-04-05T19:53:32.688+0000] {taskinstance.py:1979} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: extract_osm_farmland.load_farmland_from_api manual__2024-04-05T19:45:30.485090+00:00 [queued]>
+[2024-04-05T19:53:32.689+0000] {taskinstance.py:2193} INFO - Starting attempt 3 of 4
+[2024-04-05T19:53:32.707+0000] {taskinstance.py:2217} INFO - Executing <Task(_PythonDecoratedOperator): load_farmland_from_api> on 2024-04-05 19:45:30.485090+00:00
+[2024-04-05T19:53:32.716+0000] {standard_task_runner.py:60} INFO - Started process 9264 to run task
+[2024-04-05T19:53:32.721+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'extract_osm_farmland', 'load_farmland_from_api', 'manual__2024-04-05T19:45:30.485090+00:00', '--job-id', '266', '--raw', '--subdir', 'DAGS_FOLDER/extract_file_data_from_osm.py', '--cfg-path', '/tmp/tmpjkn4s5pl']
+[2024-04-05T19:53:32.723+0000] {standard_task_runner.py:88} INFO - Job 266: Subtask load_farmland_from_api
+[2024-04-05T19:53:32.788+0000] {task_command.py:423} INFO - Running <TaskInstance: extract_osm_farmland.load_farmland_from_api manual__2024-04-05T19:45:30.485090+00:00 [running]> on host 2adb4d880117
+[2024-04-05T19:53:32.887+0000] {taskinstance.py:2513} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='extract_osm_farmland' AIRFLOW_CTX_TASK_ID='load_farmland_from_api' AIRFLOW_CTX_EXECUTION_DATE='2024-04-05T19:45:30.485090+00:00' AIRFLOW_CTX_TRY_NUMBER='3' AIRFLOW_CTX_DAG_RUN_ID='manual__2024-04-05T19:45:30.485090+00:00'
+[2024-04-05T19:54:21.601+0000] {collection.py:293} WARNING - Skipping field nodes: invalid type 13
+[2024-04-05T19:54:39.676+0000] {logging_mixin.py:188} INFO - DataFrame uploaded to GCS: gs://sammy_project_bucket2024/osm_farmland.geojson
+[2024-04-05T19:54:39.727+0000] {python.py:202} INFO - Done. Returned value was: gs://sammy_project_bucket2024/osm_farmland.geojson
+[2024-04-05T19:54:39.752+0000] {taskinstance.py:1149} INFO - Marking task as SUCCESS. dag_id=extract_osm_farmland, task_id=load_farmland_from_api, execution_date=20240405T194530, start_date=20240405T195332, end_date=20240405T195439
+[2024-04-05T19:54:39.814+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 0
+[2024-04-05T19:54:39.843+0000] {taskinstance.py:3312} INFO - 1 downstream tasks scheduled from follow-on schedule check

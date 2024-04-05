@@ -1,0 +1,14 @@
+[2024-04-05T17:22:30.181+0000] {taskinstance.py:1979} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: extract_osm_farmland.load_data_tobigquery manual__2024-04-05T17:19:22.415895+00:00 [queued]>
+[2024-04-05T17:22:30.222+0000] {taskinstance.py:1979} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: extract_osm_farmland.load_data_tobigquery manual__2024-04-05T17:19:22.415895+00:00 [queued]>
+[2024-04-05T17:22:30.225+0000] {taskinstance.py:2193} INFO - Starting attempt 1 of 2
+[2024-04-05T17:22:30.293+0000] {taskinstance.py:2217} INFO - Executing <Task(_PythonDecoratedOperator): load_data_tobigquery> on 2024-04-05 17:19:22.415895+00:00
+[2024-04-05T17:22:30.320+0000] {standard_task_runner.py:60} INFO - Started process 7193 to run task
+[2024-04-05T17:22:30.332+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'extract_osm_farmland', 'load_data_tobigquery', 'manual__2024-04-05T17:19:22.415895+00:00', '--job-id', '247', '--raw', '--subdir', 'DAGS_FOLDER/extract_file_data_from_osm.py', '--cfg-path', '/tmp/tmpbucfpdlg']
+[2024-04-05T17:22:30.335+0000] {standard_task_runner.py:88} INFO - Job 247: Subtask load_data_tobigquery
+[2024-04-05T17:22:30.435+0000] {task_command.py:423} INFO - Running <TaskInstance: extract_osm_farmland.load_data_tobigquery manual__2024-04-05T17:19:22.415895+00:00 [running]> on host 2adb4d880117
+[2024-04-05T17:22:30.605+0000] {taskinstance.py:2513} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='extract_osm_farmland' AIRFLOW_CTX_TASK_ID='load_data_tobigquery' AIRFLOW_CTX_EXECUTION_DATE='2024-04-05T17:19:22.415895+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2024-04-05T17:19:22.415895+00:00'
+[2024-04-05T17:22:35.006+0000] {logging_mixin.py:188} INFO - 409 POST https://bigquery.googleapis.com/bigquery/v2/projects/data-enginerring-zoomcamp/datasets/farm_dataset/tables?prettyPrint=false: Already Exists: Table data-enginerring-zoomcamp:farm_dataset.farm_boundary
+[2024-04-05T17:22:35.007+0000] {python.py:202} INFO - Done. Returned value was: None
+[2024-04-05T17:22:35.027+0000] {taskinstance.py:1149} INFO - Marking task as SUCCESS. dag_id=extract_osm_farmland, task_id=load_data_tobigquery, execution_date=20240405T171922, start_date=20240405T172230, end_date=20240405T172235
+[2024-04-05T17:22:35.089+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 0
+[2024-04-05T17:22:35.126+0000] {taskinstance.py:3312} INFO - 0 downstream tasks scheduled from follow-on schedule check
