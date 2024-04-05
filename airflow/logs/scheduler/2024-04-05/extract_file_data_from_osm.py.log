@@ -12247,3 +12247,24 @@ ImportError: cannot import name 'upload_features_to_bigquery' from 'utils' (/opt
 [2024-04-05T21:03:17.829+0000] {logging_mixin.py:188} INFO - [2024-04-05T21:03:17.829+0000] {dag.py:3047} INFO - Sync 1 DAGs
 [2024-04-05T21:03:17.843+0000] {logging_mixin.py:188} INFO - [2024-04-05T21:03:17.843+0000] {dag.py:3834} INFO - Setting next_dagrun for extract_osm_farmland to None, run_after=None
 [2024-04-05T21:03:17.866+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/extract_file_data_from_osm.py took 0.807 seconds
+[2024-04-05T21:03:48.116+0000] {processor.py:161} INFO - Started process (PID=2638) to work on /opt/airflow/dags/extract_file_data_from_osm.py
+[2024-04-05T21:03:48.117+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/extract_file_data_from_osm.py for tasks to queue
+[2024-04-05T21:03:48.119+0000] {logging_mixin.py:188} INFO - [2024-04-05T21:03:48.118+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/extract_file_data_from_osm.py
+[2024-04-05T21:03:48.877+0000] {processor.py:840} INFO - DAG(s) 'extract_osm_farmland' retrieved from /opt/airflow/dags/extract_file_data_from_osm.py
+[2024-04-05T21:03:48.889+0000] {logging_mixin.py:188} INFO - [2024-04-05T21:03:48.888+0000] {dag.py:3047} INFO - Sync 1 DAGs
+[2024-04-05T21:03:48.904+0000] {logging_mixin.py:188} INFO - [2024-04-05T21:03:48.904+0000] {dag.py:3834} INFO - Setting next_dagrun for extract_osm_farmland to None, run_after=None
+[2024-04-05T21:03:48.963+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/extract_file_data_from_osm.py took 0.851 seconds
+[2024-04-05T21:04:19.813+0000] {processor.py:161} INFO - Started process (PID=2701) to work on /opt/airflow/dags/extract_file_data_from_osm.py
+[2024-04-05T21:04:19.814+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/extract_file_data_from_osm.py for tasks to queue
+[2024-04-05T21:04:19.815+0000] {logging_mixin.py:188} INFO - [2024-04-05T21:04:19.815+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/extract_file_data_from_osm.py
+[2024-04-05T21:04:20.510+0000] {processor.py:840} INFO - DAG(s) 'extract_osm_farmland' retrieved from /opt/airflow/dags/extract_file_data_from_osm.py
+[2024-04-05T21:04:20.520+0000] {logging_mixin.py:188} INFO - [2024-04-05T21:04:20.520+0000] {dag.py:3047} INFO - Sync 1 DAGs
+[2024-04-05T21:04:20.533+0000] {logging_mixin.py:188} INFO - [2024-04-05T21:04:20.533+0000] {dag.py:3834} INFO - Setting next_dagrun for extract_osm_farmland to None, run_after=None
+[2024-04-05T21:04:20.553+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/extract_file_data_from_osm.py took 0.745 seconds
+[2024-04-05T21:04:51.270+0000] {processor.py:161} INFO - Started process (PID=2763) to work on /opt/airflow/dags/extract_file_data_from_osm.py
+[2024-04-05T21:04:51.271+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/extract_file_data_from_osm.py for tasks to queue
+[2024-04-05T21:04:51.273+0000] {logging_mixin.py:188} INFO - [2024-04-05T21:04:51.272+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/extract_file_data_from_osm.py
+[2024-04-05T21:04:51.976+0000] {processor.py:840} INFO - DAG(s) 'extract_osm_farmland' retrieved from /opt/airflow/dags/extract_file_data_from_osm.py
+[2024-04-05T21:04:51.992+0000] {logging_mixin.py:188} INFO - [2024-04-05T21:04:51.992+0000] {dag.py:3047} INFO - Sync 1 DAGs
+[2024-04-05T21:04:52.007+0000] {logging_mixin.py:188} INFO - [2024-04-05T21:04:52.006+0000] {dag.py:3834} INFO - Setting next_dagrun for extract_osm_farmland to None, run_after=None
+[2024-04-05T21:04:52.038+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/extract_file_data_from_osm.py took 0.772 seconds

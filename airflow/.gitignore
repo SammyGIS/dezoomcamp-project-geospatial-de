@@ -1,0 +1,5 @@
+*.json
+/key
+dags\keys
+dags\*.json
+logs\*
