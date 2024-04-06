@@ -1,0 +1,121 @@
+[2024-04-05T23:29:39.928+0000] {taskinstance.py:1979} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: extract_osm_farmland.transform_load_togcs manual__2024-04-05T22:52:38.063678+00:00 [queued]>
+[2024-04-05T23:29:39.944+0000] {taskinstance.py:1979} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: extract_osm_farmland.transform_load_togcs manual__2024-04-05T22:52:38.063678+00:00 [queued]>
+[2024-04-05T23:29:39.945+0000] {taskinstance.py:2193} INFO - Starting attempt 2 of 2
+[2024-04-05T23:29:39.964+0000] {taskinstance.py:2217} INFO - Executing <Task(_PythonDecoratedOperator): transform_load_togcs> on 2024-04-05 22:52:38.063678+00:00
+[2024-04-05T23:29:39.974+0000] {standard_task_runner.py:60} INFO - Started process 2526 to run task
+[2024-04-05T23:29:39.986+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'extract_osm_farmland', 'transform_load_togcs', 'manual__2024-04-05T22:52:38.063678+00:00', '--job-id', '286', '--raw', '--subdir', 'DAGS_FOLDER/extract_file_data_from_osm.py', '--cfg-path', '/tmp/tmpz1xyyyy0']
+[2024-04-05T23:29:40.002+0000] {standard_task_runner.py:88} INFO - Job 286: Subtask transform_load_togcs
+[2024-04-05T23:29:40.058+0000] {task_command.py:423} INFO - Running <TaskInstance: extract_osm_farmland.transform_load_togcs manual__2024-04-05T22:52:38.063678+00:00 [running]> on host 2adb4d880117
+[2024-04-05T23:29:40.159+0000] {taskinstance.py:2513} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='extract_osm_farmland' AIRFLOW_CTX_TASK_ID='transform_load_togcs' AIRFLOW_CTX_EXECUTION_DATE='2024-04-05T22:52:38.063678+00:00' AIRFLOW_CTX_TRY_NUMBER='2' AIRFLOW_CTX_DAG_RUN_ID='manual__2024-04-05T22:52:38.063678+00:00'
+[2024-04-05T23:29:48.233+0000] {connectionpool.py:824} WARNING - Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7fe8a7a90190>: Failed to establish a new connection: [Errno -3] Temporary failure in name resolution')': /token
+[2024-04-05T23:29:52.734+0000] {connectionpool.py:824} WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7fe8a7a902e0>: Failed to establish a new connection: [Errno -2] Name or service not known')': /token
+[2024-04-05T23:29:52.783+0000] {connectionpool.py:824} WARNING - Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7fe8a7a904c0>: Failed to establish a new connection: [Errno -2] Name or service not known')': /token
+[2024-04-05T23:29:52.797+0000] {taskinstance.py:2731} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.8/site-packages/urllib3/connection.py", line 174, in _new_conn
+    conn = connection.create_connection(
+  File "/home/airflow/.local/lib/python3.8/site-packages/urllib3/util/connection.py", line 72, in create_connection
+    for res in socket.getaddrinfo(host, port, family, socket.SOCK_STREAM):
+  File "/usr/local/lib/python3.8/socket.py", line 918, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+socket.gaierror: [Errno -2] Name or service not known
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.8/site-packages/urllib3/connectionpool.py", line 715, in urlopen
+    httplib_response = self._make_request(
+  File "/home/airflow/.local/lib/python3.8/site-packages/urllib3/connectionpool.py", line 404, in _make_request
+    self._validate_conn(conn)
+  File "/home/airflow/.local/lib/python3.8/site-packages/urllib3/connectionpool.py", line 1058, in _validate_conn
+    conn.connect()
+  File "/home/airflow/.local/lib/python3.8/site-packages/urllib3/connection.py", line 363, in connect
+    self.sock = conn = self._new_conn()
+  File "/home/airflow/.local/lib/python3.8/site-packages/urllib3/connection.py", line 186, in _new_conn
+    raise NewConnectionError(
+urllib3.exceptions.NewConnectionError: <urllib3.connection.HTTPSConnection object at 0x7fe8a7a90670>: Failed to establish a new connection: [Errno -2] Name or service not known
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.8/site-packages/requests/adapters.py", line 486, in send
+    resp = conn.urlopen(
+  File "/home/airflow/.local/lib/python3.8/site-packages/urllib3/connectionpool.py", line 827, in urlopen
+    return self.urlopen(
+  File "/home/airflow/.local/lib/python3.8/site-packages/urllib3/connectionpool.py", line 827, in urlopen
+    return self.urlopen(
+  File "/home/airflow/.local/lib/python3.8/site-packages/urllib3/connectionpool.py", line 827, in urlopen
+    return self.urlopen(
+  File "/home/airflow/.local/lib/python3.8/site-packages/urllib3/connectionpool.py", line 799, in urlopen
+    retries = retries.increment(
+  File "/home/airflow/.local/lib/python3.8/site-packages/urllib3/util/retry.py", line 592, in increment
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='oauth2.googleapis.com', port=443): Max retries exceeded with url: /token (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7fe8a7a90670>: Failed to establish a new connection: [Errno -2] Name or service not known'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.8/site-packages/google/auth/transport/requests.py", line 186, in __call__
+    response = self.session.request(
+  File "/home/airflow/.local/lib/python3.8/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/home/airflow/.local/lib/python3.8/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "/home/airflow/.local/lib/python3.8/site-packages/requests/adapters.py", line 519, in send
+    raise ConnectionError(e, request=request)
+requests.exceptions.ConnectionError: HTTPSConnectionPool(host='oauth2.googleapis.com', port=443): Max retries exceeded with url: /token (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7fe8a7a90670>: Failed to establish a new connection: [Errno -2] Name or service not known'))
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/models/taskinstance.py", line 444, in _execute_task
+    result = _execute_callable(context=context, **execute_callable_kwargs)
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/models/taskinstance.py", line 414, in _execute_callable
+    return execute_callable(context=context, **execute_callable_kwargs)
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/decorators/base.py", line 241, in execute
+    return_value = super().execute(context)
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/operators/python.py", line 200, in execute
+    return_value = self.execute_callable()
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/operators/python.py", line 217, in execute_callable
+    return self.python_callable(*self.op_args, **self.op_kwargs)
+  File "/opt/airflow/dags/extract_file_data_from_osm.py", line 83, in transform_load_togcs
+    farm_gdf = download_geodataframe_from_gcs(GCS_BUCKET, GCS_INTERMEDIATE_PATH)
+  File "/opt/airflow/dags/utils.py", line 36, in download_geodataframe_from_gcs
+    data = blob.download_as_string()
+  File "/home/airflow/.local/lib/python3.8/site-packages/google/cloud/storage/blob.py", line 1550, in download_as_string
+    return self.download_as_bytes(
+  File "/home/airflow/.local/lib/python3.8/site-packages/google/cloud/storage/blob.py", line 1435, in download_as_bytes
+    self._prep_and_do_download(
+  File "/home/airflow/.local/lib/python3.8/site-packages/google/cloud/storage/blob.py", line 4362, in _prep_and_do_download
+    self._do_download(
+  File "/home/airflow/.local/lib/python3.8/site-packages/google/cloud/storage/blob.py", line 1017, in _do_download
+    response = download.consume(transport, timeout=timeout)
+  File "/home/airflow/.local/lib/python3.8/site-packages/google/resumable_media/requests/download.py", line 237, in consume
+    return _request_helpers.wait_and_retry(
+  File "/home/airflow/.local/lib/python3.8/site-packages/google/resumable_media/requests/_request_helpers.py", line 155, in wait_and_retry
+    response = func()
+  File "/home/airflow/.local/lib/python3.8/site-packages/google/resumable_media/requests/download.py", line 210, in retriable_request
+    result = transport.request(method, url, **request_kwargs)
+  File "/home/airflow/.local/lib/python3.8/site-packages/google/auth/transport/requests.py", line 537, in request
+    self.credentials.before_request(auth_request, method, url, request_headers)
+  File "/home/airflow/.local/lib/python3.8/site-packages/google/auth/credentials.py", line 230, in before_request
+    self._blocking_refresh(request)
+  File "/home/airflow/.local/lib/python3.8/site-packages/google/auth/credentials.py", line 193, in _blocking_refresh
+    self.refresh(request)
+  File "/home/airflow/.local/lib/python3.8/site-packages/google/oauth2/service_account.py", line 445, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+  File "/home/airflow/.local/lib/python3.8/site-packages/google/oauth2/_client.py", line 308, in jwt_grant
+    response_data = _token_endpoint_request(
+  File "/home/airflow/.local/lib/python3.8/site-packages/google/oauth2/_client.py", line 268, in _token_endpoint_request
+    response_status_ok, response_data, retryable_error = _token_endpoint_request_no_throw(
+  File "/home/airflow/.local/lib/python3.8/site-packages/google/oauth2/_client.py", line 215, in _token_endpoint_request_no_throw
+    request_succeeded, response_data, retryable_error = _perform_request()
+  File "/home/airflow/.local/lib/python3.8/site-packages/google/oauth2/_client.py", line 191, in _perform_request
+    response = request(
+  File "/home/airflow/.local/lib/python3.8/site-packages/google/auth/transport/requests.py", line 192, in __call__
+    raise new_exc from caught_exc
+google.auth.exceptions.TransportError: HTTPSConnectionPool(host='oauth2.googleapis.com', port=443): Max retries exceeded with url: /token (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7fe8a7a90670>: Failed to establish a new connection: [Errno -2] Name or service not known'))
+[2024-04-05T23:29:52.871+0000] {taskinstance.py:1149} INFO - Marking task as FAILED. dag_id=extract_osm_farmland, task_id=transform_load_togcs, execution_date=20240405T225238, start_date=20240405T232939, end_date=20240405T232952
+[2024-04-05T23:29:52.910+0000] {standard_task_runner.py:107} ERROR - Failed to execute job 286 for task transform_load_togcs (HTTPSConnectionPool(host='oauth2.googleapis.com', port=443): Max retries exceeded with url: /token (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7fe8a7a90670>: Failed to establish a new connection: [Errno -2] Name or service not known')); 2526)
+[2024-04-05T23:29:52.947+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 1
+[2024-04-05T23:29:53.007+0000] {taskinstance.py:3312} INFO - 0 downstream tasks scheduled from follow-on schedule check

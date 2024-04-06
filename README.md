@@ -22,6 +22,10 @@ Subsequently, the processed data is modeled and analyzed using BigQuery. To faci
 ## Architecture Diagram
 ![alt text](architecture.jpg)
 
+## Dashboard
+https://clausa.app.carto.com/map/262e9e12-4502-4415-ae4d-c8696a45dd00
+
+
 ### Pipeline Architecture
 1. **OSM Data**: Fetches farmland data from OSM to establish baseline information.
 2. **Data Transformation and Enrichment**: Utilizes Airflow to clean and augment OSM data with administrative details for better analysis.
@@ -45,3 +49,4 @@ https://medium.com/geekculture/setup-gcp-cloud-functions-triggering-by-cloud-sch
 https://cloud.google.com/bigquery/docs/geospatial-data#:~:text=Loading%20GeoJSON%20geometry%20data&text=To%20load%20this%20type%20of,data%20as%20a%20STRING%20value
 https://mihaibojin.medium.com/deploy-and-configure-google-compute-engine-vms-with-terraform-f6b708b226c1
 https://www.youtube.com/watch?v=49C7eE_mhm4
+https://id.cloud-ace.com/using-geojson-in-bigquery-for-geospatial-analytics/
