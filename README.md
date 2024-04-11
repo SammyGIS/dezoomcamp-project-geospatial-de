@@ -24,6 +24,10 @@ Subsequently, the processed data is modeled and analyzed using BigQuery. To faci
 
 ## Dashboard
 ![alt text](dashboard.jpg)
+
+
+### Link to the Dashboard
+Carto Dasboard Expires after 14 days, so i used the free trial.
 https://clausa.app.carto.com/map/262e9e12-4502-4415-ae4d-c8696a45dd00
 
 
