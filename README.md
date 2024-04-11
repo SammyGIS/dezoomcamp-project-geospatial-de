@@ -23,7 +23,7 @@ Subsequently, the processed data is modeled and analyzed using BigQuery. To faci
 ![alt text](architecture.jpg)
 
 ## Dashboard
-![alt text](dashboard.jgp)
+![alt text](dashboard.jpg)
 https://clausa.app.carto.com/map/262e9e12-4502-4415-ae4d-c8696a45dd00
 
 
