@@ -23,7 +23,7 @@ Subsequently, the processed data is modeled and analyzed using BigQuery. To faci
 ![alt text](architecture.jpg)
 
 ## Dashboard
-![alt text](dashboard.jpg)
+![alt text](dashboard.JPG)
 
 
 ### Link to the Dashboard
