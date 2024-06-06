@@ -10,9 +10,8 @@ dotenv.load_dotenv()
 
 # 2. Set JSON key as environment variable
 
-email = os.getenv('EMAIL')
+email = "farm-watch-project@data-enginerring-zoomcamp.iam.gserviceaccount.com"
 key_file = "data-enginering-zoom-camp-d547d133c38f.json"
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"]=key_file
 
 # Authenticate and initialize
 credentials = ee.ServiceAccountCredentials(email=email, key_file=key_file)
