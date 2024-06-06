@@ -63,7 +63,7 @@ terraform/
 
 ### Clone the Repository
 ```bash
-git clone <repository_url>
+git clone https://github.com/SammyGIS/zoomcamp-geospatial_engineering_project.git
 ```
 
 ## Key Components
