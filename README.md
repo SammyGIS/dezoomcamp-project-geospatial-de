@@ -45,6 +45,8 @@ Note: The Carto Dashboard expires after 14 days as it uses the free trial.
 ```plaintext
 airflow/
   - dag/
+    - extract_file_data_from_osm.py
+    - utils.py
   - docker-compose.yml
   - Dockerfile
 gee/
@@ -54,10 +56,13 @@ gee/
   - requirements.txt
 terraform/
   - keys/
+    - .json
   - main.tf
   - variables.tf
   - ndvi_function/ (local package)
+    - main.py
   - ndmi_function/ (local package)
+    - main.py
 ```
 
 ### Clone the Repository
