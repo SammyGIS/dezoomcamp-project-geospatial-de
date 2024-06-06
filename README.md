@@ -1,4 +1,3 @@
-```markdown
 # FarmWatch: Monitoring Agricultural Lands with Satellite Imagery
 
 ## Pipeline Overview
@@ -79,4 +78,3 @@ git clone https://github.com/SammyGIS/zoomcamp-geospatial_engineering_project.gi
 - [BigQuery Geospatial Data](https://cloud.google.com/bigquery/docs/geospatial-data)
 - [Deploy and Configure Google Compute Engine VMs with Terraform](https://mihaibojin.medium.com/deploy-and-configure-google-compute-engine-vms-with-terraform-f6b708b226c1)
 - [Using GeoJSON in BigQuery for Geospatial Analytics](https://id.cloud-ace.com/using-geojson-in-bigquery-for-geospatial-analytics/)
-```
