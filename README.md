@@ -30,10 +30,10 @@ Next, the processed data is modeled and analyzed using BigQuery. For visualizati
 8. **Dashboard Visualization**: Leverages Carto Dashboard to visualize spatial data and provide insights for monitoring agricultural lands.
 
 ## Architecture Diagram
-![FarmWatch Architecture](architecture.jpg)
+![FarmWatch Architecture](image/architecture.jpg)
 
 ## Dashboard
-![FarmWatch Dashboard](dashboard.JPG)
+![FarmWatch Dashboard](image/dashboard.JPG)
 
 ### Link to the Dashboard
 Note: The Carto Dashboard expires after 14 days as it uses the free trial.
@@ -63,6 +63,7 @@ terraform/
     - main.py
   - ndmi_function/ (local package)
     - main.py
+image/
 ```
 
 ### Clone the Repository
